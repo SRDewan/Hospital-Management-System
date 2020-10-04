@@ -19,6 +19,7 @@ def qexec(query):
 
 def adddept(dno, staff_id):
         
+    tmp = sp.call('clear', shell = True)
     dept = {}
     heads = {}
     
@@ -40,6 +41,7 @@ def adddept(dno, staff_id):
 
 def adddoc(staff_id):
 
+    tmp = sp.call('clear', shell = True)
     doctor = {}
     special = {}
     works = {}
@@ -84,6 +86,7 @@ def adddoc(staff_id):
 
 def addedu(staff_id):
 
+    tmp = sp.call('clear', shell = True)
     more = "y"
     education = {}
     while(more == "y"):
@@ -115,6 +118,7 @@ def addshift(staff_id):
 def addstaff():
 
     try:
+        tmp = sp.call('clear', shell = True)
         staff = {}
 
         flag = 1
