@@ -771,8 +771,7 @@ CREATE TABLE `Works_In` (
   `Dno` int NOT NULL,
   PRIMARY KEY (`Staff_Id`),
   KEY `Dno` (`Dno`),
-  CONSTRAINT `Works_In_ibfk_1` FOREIGN KEY (`Staff_Id`) REFERENCES `Doctor` (`Staff_Id`),
-  CONSTRAINT `Works_In_ibfk_2` FOREIGN KEY (`Staff_Id`) REFERENCES `Heads` (`Dno`)
+  CONSTRAINT `Works_In_ibfk_1` FOREIGN KEY (`Staff_Id`) REFERENCES `Doctor` (`Staff_Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
