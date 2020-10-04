@@ -14,8 +14,137 @@ def qexec(query):
     except pymysql.Error as e:
         con.rollback()
         tmp = sp.call('clear', shell = True)
-        print("Could not insert into database! Error pymysql %d: %s" %(e.args[0], e.args[1]))
+        print("Error pymysql %d: %s" %(e.args[0], e.args[1]))
         return -1;
+
+def delins(pid):
+
+    query = "select Insurance_Id from Insured_Patients where Patient_Id = %d" % (pid)
+    if(qexec(query)):
+        return -1
+    ins = cur.fetchall()
+
+    query = """delete from Insured_Patients where Patient_Id = %d""" % (pid)
+    if(qexec(query)):
+        return -1;
+
+    for x in ins:
+        query = """delete from Insured_Details where Insurance_Id = %d""" % (x["Insurance_Id"])
+        if(qexec(query)):
+            return -1;
+
+    return 0
+
+def delpat():
+
+    try:
+        tmp = sp.call('clear', shell = True)
+        pid = int(input("Enter Patient Id of patient to be removed: "))
+
+        if(delins(pid)):
+            return -1
+
+        query = """delete from Patient where Patient_Id = %d""" % (pid)
+        if(qexec(query)):
+            return -1;
+        return 0
+
+    except Exception as e:
+        con.rollback()
+        print("Error: ", e)
+        return -1
+
+def deldept(sid):
+
+    query = """select Dno from Works_In where Staff_Id = %d""" % (sid)
+    if(qexec(query)):
+        return -1;
+    dnos = cur.fetchall()
+
+    query = """select Dno from Heads where Staff_Id = %d""" % (sid)
+    if(qexec(query)):
+        return -1;
+    heads = cur.fetchall()
+
+    query = """delete from Heads where Staff_Id = %d""" % (sid)
+    if(qexec(query)):
+        return -1;
+
+    query = """delete from Works_In where Staff_Id = %d""" % (sid)
+    if(qexec(query)):
+        return -1;
+
+    for dno in dnos:
+        query = """select Dno from Works_In where Dno = %d""" % (dno["Dno"])
+        if(qexec(query)):
+            return -1;
+        ents = cur.fetchall()
+        if(ents == ()):
+            query = """delete from Department where Dno = %d""" % (dno["Dno"])
+            if(qexec(query)):
+                return -1;
+
+    for elem in heads:
+        if(elem in dnos):
+            continue
+        flag = 1
+        while(flag):
+            hid = input("Enter staff id of new head of department %d: ", elem["Dno"])
+            if(hid == sid):
+                print("Error: Cannot use id of member being removed.")
+                continue
+
+            query = "insert into Heads values(%d, %d)" % (elem["Dno"], hid)
+            if(qexec(query) == 0):
+                flag = 0
+
+    return 0
+
+def deldoc(sid):
+
+    query = """select * from Doctor where Staff_Id = %d""" % (sid)
+    if(qexec(query)):
+        return -1;
+    row = cur.fetchall()
+
+    if(row != ()):
+        query = """delete from Specialisation where Staff_Id = %d""" % (sid)
+        if(qexec(query)):
+            return -1;
+
+        if(deldept(sid)):
+            return -1
+
+        query = """delete from Doctor where Staff_Id = %d""" % (sid)
+        if(qexec(query)):
+            return -1;
+
+    return 0
+
+def delstaff():
+
+    try:
+        tmp = sp.call('clear', shell = True)
+        sid = int(input("Enter Staff Id of staff member to be removed: "))
+
+        query = """delete from Shift where Staff_Id = %d""" % (sid)
+        if(qexec(query)): return -1; 
+        query = """delete from Education where Staff_Id = %d""" % (sid)
+        if(qexec(query)):
+            return -1;
+
+        if(deldoc(sid)):
+            return -1
+
+        query = """delete from Staff where Staff_Id = %d""" % (sid)
+        if(qexec(query)):
+            return -1;
+        return 0
+
+    except Exception as e:
+        con.rollback()
+        print("Error: ", e)
+        return -1
 
 def addins(patid):
 
@@ -56,7 +185,7 @@ def addpat():
             patient["Patient_Id"] = temp
             flag = 0
             for oid in ids:
-                if(oid == temp):
+                if(oid["Patient_Id"] == temp):
                     flag = 1
                     break
 
@@ -103,19 +232,12 @@ def adddept(dno, staff_id):
         
     tmp = sp.call('clear', shell = True)
     dept = {}
-    heads = {}
     
     dept["Dno"] = dno
     dept["Dname"] = input("Department name: ")
     dept["Location_Floor"] = int(input("Floor number: "))
     dept["Location_Block"] = input("Block: ")
     query = """insert into Department values(%d, "%s", %d, "%s")""" % (dept["Dno"], dept["Dname"], dept["Location_Floor"], dept["Location_Block"])
-    if(qexec(query)):
-        return -1;
-
-    heads["Staff_Id"] = staff_id
-    heads["Dno"] = dno
-    query = "insert into Heads values(%d, %d)" % (heads["Dno"], heads["Staff_Id"]) 
     if(qexec(query)):
         return -1;
 
@@ -127,6 +249,7 @@ def adddoc(staff_id):
     doctor = {}
     special = {}
     works = {}
+    heads = {}
 
     doctor["Staff_Id"] = staff_id
     doctor["Consultation_Fee"] = int(input("Consultation Fee: "))
@@ -140,27 +263,33 @@ def adddoc(staff_id):
         special["Expertise_Area"] = input("Expertise Area: ")
         query = """insert into Specialisation values(%d, "%s")""" % (special["Staff_Id"], special["Expertise_Area"])
         if(qexec(query)):
-            return -1;
+            continue
         more = input("Do you wish to enter more expertise areas(y / n): ")
 
     works["Staff_Id"] = staff_id
-    row = {}
+    row = ()
     dnew = "n"
 
-    while(row == {} and dnew != "y"):
+    while(row == () and dnew != "y"):
         works["Dno"] = int(input("Department Number: "))
         query = "select Dno from Works_In where Dno = %d" % (works["Dno"])
         if(qexec(query)):
             return -1;
         row = cur.fetchall()
 
-        if(row == {}):
+        if(row == ()):
             dnew = input("Department does not exist. Would you like to create a new department(y / n): ")
             if(dnew == "y"):
                 if(adddept(works["Dno"], staff_id)):
                     return -1;
 
     query = "insert into Works_In values(%d, %d)" % (works["Staff_Id"], works["Dno"])
+    if(qexec(query)):
+        return -1;
+
+    heads["Staff_Id"] = staff_id
+    heads["Dno"] = works["Dno"]
+    query = "insert into Heads values(%d, %d)" % (heads["Dno"], heads["Staff_Id"]) 
     if(qexec(query)):
         return -1;
 
@@ -176,7 +305,7 @@ def addedu(staff_id):
         education["Degree"] = input("Degree: ")
         query = """insert into Education values(%d, "%s")""" % (education["Staff_Id"], education["Degree"])
         if(qexec(query)):
-            return -1;
+            continue 
         more = input("Do you wish to enter more degrees(y / n): ")
 
     return 0
@@ -189,10 +318,11 @@ def addshift(staff_id):
     while(more == "y"):
         shift["Staff_Id"] = staff_id
         shift["Shift_Day"] = (input("Shift Day: "))
-        shift["Shift_Time"] = (input("Shift Time (HH:MM:SS): "))
-        query = """insert into Shift values(%d, "%s", "%s")""" % (shift["Staff_Id"], shift["Shift_Time"], shift["Shift_Day"])
+        shift["Shift_Start_Time"] = (input("Shift Start Time (HH:MM:SS): "))
+        shift["Shift_End_Time"] = (input("Shift End Time (HH:MM:SS): "))
+        query = """insert into Shift values(%d, "%s", "%s", "%s")""" % (shift["Staff_Id"], shift["Shift_Start_Time"], shift["Shift_End_Time"], shift["Shift_Day"])
         if(qexec(query)):
-            return -1;
+            continue
         more = input("Do you wish to enter more shifts(y / n): ")
 
     return 0
@@ -214,7 +344,7 @@ def addstaff():
             staff["Staff_Id"] = temp
             flag = 0
             for oid in ids:
-                if(oid == temp):
+                if(oid["Staff_Id"] == temp):
                     flag = 1
                     break
 
@@ -261,13 +391,32 @@ def addstaff():
             if(adddoc(staff["Staff_Id"])):
                 return -1
 
-        tmp = input("Enter any key to CONTINUE:")
         return 0
 
     except Exception as e:
         con.rollback()
         print("Error: ", e)
         return -1
+
+def remove(opt):
+
+    if(opt == 1):
+        if(delstaff()):
+            con.rollback
+            return -1
+        else:
+            con.commit()
+            return 0
+
+    elif(opt == 2):
+        if(delpat()):
+            con.rollback
+            return -1
+        else:
+            con.commit()
+            return 0
+    else:
+        print("Error: Invalid Option")
 
 def add(opt):
 
@@ -379,31 +528,27 @@ def dispatch(ch):
     if(ch == 1):
         print("1. Add staff member")
         print("2. Add patient")
-        opt = input("Enter choice: ")
+        opt = int(input("Enter choice: "))
         tmp = sp.call('clear', shell = True)
         add(opt)
 
     # elif(ch == 2):
-    # elif(ch == 3):
-    elif(ch == 4):
-    	print("1. Show details of available rooms")
-        print("2. Show details of staff with particular shiftday")
-        print("3. Show all doctor of particular specialisation")
-        print("4. Show all insured patients with particular insurance company")
-        print("5. Show contact of particular patient")
-        print("6. Show complaint and diagonosis of particular prescription")
-        print("7. Show bill amount for particular bill")
-        print("8. Show details of particular department")
-        print("9. Show quantity of particular medicine")
-        opti = input("Enter choice: ")
+
+    elif(ch == 3):
+        print("1. Remove staff member")
+        print("2. Remove patient")
+        opt = int(input("Enter choice: "))
         tmp = sp.call('clear', shell = True)
-        info(opti)
+        remove(opt)
+
+    # elif(ch == 4):
 
     elif(ch == 6):
         print("Goodbye! Have a nice day!")
     else:
         print("Error: Invalid Option")
 
+    tmp = input("Enter any key to CONTINUE:")
     return 0
 
 def options():
