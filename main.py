@@ -9,12 +9,13 @@ def qexec(query):
 
     try:
         cur.execute(query)
-        con.commit()
+        return 0;
 
     except pymysql.Error as e:
         con.rollback()
         tmp = sp.call('clear', shell = True)
         print("Could not insert into database! Error pymysql %d: %s" %(e.args[0], e.args[1]))
+        return -1;
 
 def adddept(dno, staff_id):
         
@@ -26,12 +27,16 @@ def adddept(dno, staff_id):
     dept["Location_Floor"] = int(input("Floor number: "))
     dept["Location_Block"] = input("Block: ")
     query = """insert into Department values(%d, "%s", %d, "%s")""" % (dept["Dno"], dept["Dname"], dept["Location_Floor"], dept["Location_Block"])
-    qexec(query)
+    if(qexec(query)):
+        return -1;
 
     heads["Staff_Id"] = staff_id
     heads["Dno"] = dno
     query = "insert into Heads values(%d, %d)" % (heads["Dno"], heads["Staff_Id"]) 
-    qexec(query)
+    if(qexec(query)):
+        return -1;
+
+    return 0
 
 def adddoc(staff_id):
 
@@ -42,14 +47,16 @@ def adddoc(staff_id):
     doctor["Staff_Id"] = staff_id
     doctor["Consultation_Fee"] = int(input("Consultation Fee: "))
     query = "insert into Doctor values(%d, %d)" % (doctor["Staff_Id"], doctor["Consultation_Fee"])
-    qexec(query)
+    if(qexec(query)):
+        return -1;
 
     more = "y"
     while(more == "y"):
         special["Staff_Id"] = staff_id
         special["Expertise_Area"] = input("Expertise Area: ")
         query = """insert into Specialisation values(%d, "%s")""" % (special["Staff_Id"], special["Expertise_Area"])
-        qexec(query)
+        if(qexec(query)):
+            return -1;
         more = input("Do you wish to enter more expertise areas(y / n): ")
 
     works["Staff_Id"] = staff_id
@@ -59,16 +66,21 @@ def adddoc(staff_id):
     while(row == {} and dnew != "y"):
         works["Dno"] = int(input("Department Number: "))
         query = "select Dno from Works_In where Dno = %d" % (works["Dno"])
-        qexec(query)
+        if(qexec(query)):
+            return -1;
         row = cur.fetchall()
 
         if(row == {}):
             dnew = input("Department does not exist. Would you like to create a new department(y / n): ")
             if(dnew == "y"):
-                adddept(works["Dno"], staff_id)
+                if(adddept(works["Dno"], staff_id)):
+                    return -1;
 
     query = "insert into Works_In values(%d, %d)" % (works["Staff_Id"], works["Dno"])
-    qexec(query)
+    if(qexec(query)):
+        return -1;
+
+    return 0
 
 def addedu(staff_id):
 
@@ -78,8 +90,11 @@ def addedu(staff_id):
         education["Staff_Id"] = staff_id
         education["Degree"] = input("Degree: ")
         query = """insert into Education values(%d, "%s")""" % (education["Staff_Id"], education["Degree"])
-        qexec(query)
+        if(qexec(query)):
+            return -1;
         more = input("Do you wish to enter more degrees(y / n): ")
+
+    return 0
 
 def addshift(staff_id):
     
@@ -91,8 +106,11 @@ def addshift(staff_id):
         shift["Shift_Day"] = (input("Shift Day: "))
         shift["Shift_Time"] = (input("Shift Time (HH:MM:SS): "))
         query = """insert into Shift values(%d, "%s", "%s")""" % (shift["Staff_Id"], shift["Shift_Time"], shift["Shift_Day"])
-        qexec(query)
+        if(qexec(query)):
+            return -1;
         more = input("Do you wish to enter more shifts(y / n): ")
+
+    return 0
 
 def addstaff():
 
@@ -101,7 +119,8 @@ def addstaff():
 
         flag = 1
         query = "select Staff_Id from Staff"
-        qexec(query)
+        if(qexec(query)):
+            return -1;
         ids = cur.fetchall()
 
         while(flag):
@@ -144,28 +163,36 @@ def addstaff():
             staff["Supervisor_Id"] = "NULL"
 
         query = """insert into Staff values(%d, "%s", "%s", "%s", %d, "%s", "%s", %s, "%s", %s, "%s", "%s", %s)""" % (staff["Staff_Id"], staff["First_Name"], staff["Last_Name"], staff["Sex"], staff["Salary"], staff["Contact_No"], staff["Date_of_Birth"], staff["H_No"], staff["Street"], staff["Zipcode"], staff["City"], staff["Job"], staff["Supervisor_Id"])
-        qexec(query)
+        if(qexec(query)):
+            return -1;
 
-        addshift(staff["Staff_Id"])
-        addedu(staff["Staff_Id"])
+        if(addshift(staff["Staff_Id"])):
+            return -1
+        if(addedu(staff["Staff_Id"])):
+            return -1
 
         if(staff["Job"] == "Doctor"):
-            adddoc(staff["Staff_Id"])
+            if(adddoc(staff["Staff_Id"])):
+                return -1
 
         tmp = input("Enter any key to CONTINUE:")
+        return 0
 
     except Exception as e:
         con.rollback()
         print("Error: ", e)
+        return -1
 
 def dispatch(ch):
-    """
-    Function that maps helper functions to option entered
-    """
 
-    print("heya")
     if(ch == 1):
-        addstaff()
+        if(addstaff()):
+            con.rollback
+            return -1
+        else:
+            con.commit()
+            return 0
+
     elif(ch == 2):
         addpat()
     elif(ch == 3):
@@ -176,6 +203,7 @@ def dispatch(ch):
         print("Error: Invalid Option")
 
 def options():
+
     print("1. Add staff member")  # Hire an Employee
     print("2. Add patient")  # Fire an Employee
     print("3. Option 3")  # Promote Employee
@@ -186,8 +214,8 @@ def options():
     dispatch(ch)
     return ch
 
-# Global
 while(1):
+
     tmp = sp.call('clear', shell = True)
     
     username = input("Username: ")
