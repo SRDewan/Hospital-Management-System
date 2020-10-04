@@ -73,8 +73,8 @@ DROP TABLE IF EXISTS `Bill`;
 CREATE TABLE `Bill` (
   `Bill_No` int NOT NULL,
   `Amount` int NOT NULL,
-  `Date` date DEFAULT NULL,
-  `Time` time DEFAULT NULL,
+  `Date` date NOT NULL,
+  `Time` time NOT NULL,
   `Payment_Status` char(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`Bill_No`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
