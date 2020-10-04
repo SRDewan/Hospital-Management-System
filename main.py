@@ -289,6 +289,91 @@ def add(opt):
     else:
         print("Error: Invalid Option")
 
+def info(opti):
+	if(opti == 1):
+		query = "select * from Room where available =1"
+		if(qexec(query)):
+            return -1;
+        res = cur.fetchall()
+        for row in res:
+            print(res['Room_No'], res['Location_Block'], res['Location_Floor'], res['Room_Type'])
+
+	elif(opti == 2):
+		shift = input("Shift Day: ")
+        query = """select First_Name Last_Name from Staff inner join Shift on Staff.Staff_Id= Shift.Staff_Id where Shift_Day = "%s" """ % (shift)
+        if(qexec(query)):
+            return -1;
+        res = cur.fetchall()
+        for row in res:
+            print(res['First_Name'], res['Last_Name'])
+
+	elif(opti == 3):
+		spec = input("Specialisation: ")
+        query = """select First_Name Last_Name from Staff inner join Specialisation on Staff.Staff_Id= Specialisation.Staff_Id where Expertise_Area = "%s" """ % (spec)
+        if(qexec(query)):
+            return -1;
+        res = cur.fetchall()
+        for row in res:
+            print(res['First_Name'], res['Last_Name'])
+
+	elif(opti == 4):
+		comp = input("Companyname: ")
+        query = """select First_Name Last_Name from Patient inner join Insured_Details on Patient.Insurance_Id= Insured_Details.Insurance_Id where Company = "%s" """ % (comp)
+        if(qexec(query)):
+            return -1;
+        res = cur.fetchall()
+        for row in res:
+            print(res['First_Name'], res['Last_Name'])
+
+	elif(opti == 5):
+		patno = input("Patient_Id: ")
+        query = "select Patient_Id Contact_No from Patient where Patient_Id = %d " % (patno)
+        if(qexec(query)):
+            return -1;
+        res = cur.fetchall()
+        for row in res:
+            print(res['Patient_Id'], res['Contact_No'])
+
+	elif(opti == 6):
+		pno = input("Pno: ")
+        query = "select * from Prescription where Pno = %d " % (pno)
+        if(qexec(query)):
+            return -1;
+        res = cur.fetchall()
+        for row in res:
+            print(res['Pno'], res['Complaint'], res['Diagnosis'])
+
+	elif(opti == 7):
+		billno = input("Bill_No: ")
+        query = "select Amount from Bill where Bill_No = %d " % (billno)
+        if(qexec(query)):
+            return -1;
+        res = cur.fetchall()
+        for row in res:
+            print(res['Amount'])
+
+	elif(opti == 8):
+		dno = input("Dno: ")
+        query = "select * from Department where Dno = %d " % (dno)
+        if(qexec(query)):
+            return -1;
+        res = cur.fetchall()
+        for row in res:
+            print(res['DNo'], res['Dname'], res['Location_Block'], res['Location_Floor'])
+            
+	elif(opti == 9):
+		medname = input("Medicine Name: ")
+        query = """select Batch_No Qty from Batch_Details inner join Medication on Batch_Details.Batch_No= Medication.Batch_No where Med_Name = "%s" """ % (medname)
+        if(qexec(query)):
+            return -1;
+        res = cur.fetchall()
+        for row in res:
+            print(res['Batch_No'], res['Qty'])
+
+	else:
+        print("Error: Invalid Option")
+
+
 def dispatch(ch):
 
     if(ch == 1):
@@ -300,7 +385,20 @@ def dispatch(ch):
 
     # elif(ch == 2):
     # elif(ch == 3):
-    # elif(ch == 4):
+    elif(ch == 4):
+    	print("1. Show details of available rooms")
+        print("2. Show details of staff with particular shiftday")
+        print("3. Show all doctor of particular specialisation")
+        print("4. Show all insured patients with particular insurance company")
+        print("5. Show contact of particular patient")
+        print("6. Show complaint and diagonosis of particular prescription")
+        print("7. Show bill amount for particular bill")
+        print("8. Show details of particular department")
+        print("9. Show quantity of particular medicine")
+        opti = input("Enter choice: ")
+        tmp = sp.call('clear', shell = True)
+        info(opti)
+
     elif(ch == 6):
         print("Goodbye! Have a nice day!")
     else:
