@@ -541,7 +541,19 @@ def dispatch(ch):
         tmp = sp.call('clear', shell = True)
         remove(opt)
 
-    # elif(ch == 4):
+    elif(ch == 4):
+    	print("1. Show details of available rooms")
+        print("2. Show details of staff with particular shiftday")
+        print("3. Show all doctor of particular specialisation")
+        print("4. Show all insured patients with particular insurance company")
+        print("5. Show contact of particular patient")
+        print("6. Show complaint and diagonosis of particular prescription")
+        print("7. Show bill amount for particular bill")
+        print("8. Show details of particular department")
+        print("9. Show quantity of particular medicine")
+        opti = input("Enter choice: ")
+        tmp = sp.call('clear', shell = True)
+        info(opti)
 
     elif(ch == 6):
         print("Goodbye! Have a nice day!")
