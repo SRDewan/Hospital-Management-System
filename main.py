@@ -269,9 +269,9 @@ def addstaff():
         print("Error: ", e)
         return -1
 
-def dispatch(ch):
+def add(opt):
 
-    if(ch == 1):
+    if(opt == 1):
         if(addstaff()):
             con.rollback
             return -1
@@ -279,30 +279,45 @@ def dispatch(ch):
             con.commit()
             return 0
 
-    elif(ch == 2):
+    elif(opt == 2):
         if(addpat()):
             con.rollback
             return -1
         else:
             con.commit()
             return 0
-
-    elif(ch == 3):
-        option3()
-    elif(ch == 4):
-        option4()
     else:
         print("Error: Invalid Option")
 
+def dispatch(ch):
+
+    if(ch == 1):
+        print("1. Add staff member")
+        print("2. Add patient")
+        opt = input("Enter choice: ")
+        tmp = sp.call('clear', shell = True)
+        add(opt)
+
+    # elif(ch == 2):
+    # elif(ch == 3):
+    # elif(ch == 4):
+    elif(ch == 6):
+        print("Goodbye! Have a nice day!")
+    else:
+        print("Error: Invalid Option")
+
+    return 0
+
 def options():
 
-    print("1. Add staff member")  # Hire an Employee
-    print("2. Add patient")  # Fire an Employee
-    print("3. Option 3")  # Promote Employee
-    print("4. Option 4")  # Employee Statistics
-    print("5. Logout")
+    print("1. Add entity")
+    print("2. Modify entity")
+    print("3. Delete entity")
+    print("4. Information retrieval")
+    print("5. Analysis information")
+    print("6. Logout")
     ch = int(input("Enter choice: "))
-    # tmp = sp.call('clear', shell = True)
+    tmp = sp.call('clear', shell = True)
     dispatch(ch)
     return ch
 
@@ -343,8 +358,8 @@ while(1):
 
         with con.cursor() as cur:
             ret = 0
-            while(ret != 7):
-                # tmp = sp.call('clear', shell=True)
+            while(ret != 6):
+                tmp = sp.call('clear', shell=True)
                 ret = options()
 
     except pymysql.Error as e:
