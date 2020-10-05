@@ -13,6 +13,7 @@ import rempat
 import info
 import modstaff
 import modpat
+import misc
 
 inf = 1000000
 
@@ -55,6 +56,31 @@ def modify(opt):
         else:
             con.commit()
             return 0
+    
+    elif(opt == 3):
+        if(updateAppointment()):
+            con.rollback
+            return -1
+        else:
+            con.commit()
+            return 0
+
+    elif(opt == 4):
+        if(updateTestPricing()):
+            con.rollback
+            return -1
+        else:
+            con.commit()
+            return 0
+
+    elif(opt == 5):
+        if(updateMedicationPricing()):
+            con.rollback
+            return -1
+        else:
+            con.commit()
+            return 0
+
     else:
         print("Error: Invalid Option")
 
@@ -85,6 +111,38 @@ def add(opt):
             con.commit()
             return 0
 
+    elif(opt == 4):
+        if(addAppointment()):
+            con.rollback
+            return -1
+        else:
+            con.commit()
+            return 0
+
+    elif(opt == 5):
+        if(addMedication()):
+            con.rollback
+            return -1
+        else:
+            con.commit()
+            return 0
+
+    elif(opt == 6):
+        if(addTestPricing()):
+            con.rollback
+            return -1
+        else:
+            con.commit()
+            return 0
+
+    elif(opt == 7):
+        if(addPrescription()):
+            con.rollback
+            return -1
+        else:
+            con.commit()
+            return 0
+
     else:
         print("Error: Invalid Option")
 
@@ -92,9 +150,13 @@ def add(opt):
 def dispatch(ch):
 
     if(ch == 1):
-        print("1. Add staff member")
-        print("2. Add patient")
-        print("3. Add room")
+        print("1. Add Staff Member")
+        print("2. Add Patient")
+        print("3. Add Room")
+        print("4. Add Appointment")
+        print("5. Add Medication")
+        print("6. Add Test/Surgery")
+        print("7. Add Prescription")
         opt = int(input("Enter choice: "))
         tmp = sp.call('clear', shell=True)
         add(opt)
@@ -102,6 +164,9 @@ def dispatch(ch):
     elif(ch == 2):
         print("1. Edit staff member details")
         print("2. Edit patient details")
+        print("3. Edit Appointment Details")
+        print("4. Edit Test/Surgery Pricing")
+        print("5. Edit Medication Pricing")
         opt = int(input("Enter choice: "))
         tmp = sp.call('clear', shell=True)
         modify(opt)
@@ -146,8 +211,8 @@ def options():
     print("1. Add entity")
     print("2. Modify entity")
     print("3. Delete entity")
-    print("4. Information retrieval")
-    print("5. Analysis information")
+    print("4. Information Retrieval")
+    print("5. Analysis Information")
     print("6. Logout")
     ch = int(input("Enter choice: "))
     tmp = sp.call('clear', shell=True)
@@ -216,6 +281,9 @@ while(1):
             from modstaff import modstaff
             modpat.cur = cur    
             from modpat import modpat
+
+            misc.cur = cur
+            from misc import addAppointment, addMedication, addMedDetails, addBatchDetails, addSupplierDetails, addTestorSurgery, addTestPricing, addPrescription, createBill, entails, recommends, performs, schedules, updateAppointment, updateTestPricing, updateMedicationPricing
 
             while(ret != 6):
                 tmp = sp.call('clear', shell=True)
