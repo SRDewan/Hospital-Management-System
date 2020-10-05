@@ -11,6 +11,7 @@ import addroom
 import remstaff
 import rempat
 import info
+import analy
 import modstaff
 import modpat
 import misc
@@ -197,6 +198,16 @@ def dispatch(ch):
         tmp = sp.call('clear', shell=True)
         info(opti)
 
+    elif(ch == 5):
+        print("1. Show the average, max, min bill amount in certain period of time")
+        print("2. Show the total income of Hospital in certain period of time")
+        print("3. Show the average, max, min salary of staff members")
+        print("4. Show the total bill of a particular patient")
+        print("5. Show the average, max, min hourly tariff of rooms")
+        optio = int(input("Enter choice: "))
+        tmp = sp.call('clear', shell=True)
+        analy(optio)
+
     elif(ch == 6):
         print("Goodbye! Have a nice day!")
     else:
@@ -264,6 +275,9 @@ while(1):
 
             info.cur = cur
             from info import info
+
+            analy.cur = cur
+            from analy import analy
 
             remstaff.cur = cur
             from remstaff import delstaff, deldoc, deldept
