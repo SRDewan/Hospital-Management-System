@@ -8,18 +8,13 @@ def info(opti):
 
     try:
         if(opti == 1):
-            query = "select * from Room where available =1"
+            query = "select * from Room where Available =1"
             if(qexec(query)):
                 return -1
 
             res = cur.fetchall()
-            print("Room_No   Location_Block   Location_Floor   Room_Type");
             for row in res:
-                print(
-                    row['Room_No'],
-                    row['Location_Block'],
-                    row['Location_Floor'],
-                    row['Room_Type'])
+            	print("Room_No:",row['Room_No']," Location_Block:",row['Location_Block']," Location_Floor:", row['Location_Floor']," Room_Type:", row['Room_Type'])
 
         elif(opti == 2):
             shift = input("Shift Day: ")
@@ -29,9 +24,8 @@ def info(opti):
                 return -1
 
             res = cur.fetchall()
-            print("First_Name   Last_Name");
             for row in res:
-                print(row['First_Name'], row['Last_Name'])
+            	print("First_Name:",row['First_Name']," Last_Name:", row['Last_Name'])
 
         elif(opti == 3):
             spec = input("Specialisation: ")
@@ -41,21 +35,25 @@ def info(opti):
                 return -1
 
             res = cur.fetchall()
-            print("First_Name   Last_Name");
             for row in res:
-                print(row['First_Name'], row['Last_Name'])
+            	print("First_Name:",row['First_Name']," Last_Name:", row['Last_Name'])
 
         elif(opti == 4):
             comp = input("Companyname: ")
-            query = """select First_Name, Last_Name from Patient inner join Insured_Details on Patient.Insurance_Id= Insured_Details.Insurance_Id where Company = "%s" """ % (
-                comp)
+            query = """select Insurance_Id from Insured_Details where Company = "%s" """ % (comp)
             if(qexec(query)):
                 return -1
-
             res = cur.fetchall()
-            print("First_Name   Last_Name");
+
             for row in res:
-                print(row['First_Name'], row['Last_Name'])
+            	num=row['Insurance_Id']
+            	que = """select First_Name, Last_Name from Patient inner join Insured_Patients on Patient.Patient_Id= Insured_Patients.Patient_Id where Insurance_Id = %d """ % (
+                num)
+            	if(qexec(que)):
+            		return -1
+            	qes =cur.fetchall()
+            	for rum in qes:
+            		print("First_Name:",rum['First_Name']," Last_Name:",rum['Last_Name'])
 
         elif(opti == 5):
             patno = int(input("Patient_Id: "))
@@ -65,9 +63,8 @@ def info(opti):
                 return -1
 
             res = cur.fetchall()
-            print("Patient_Id   First_Name   Last_Name   Contact_No");
             for row in res:
-                print(row['Patient_Id'], row['First_Name'], row['Last_Name'], row['Contact_No'])
+            	print("Patient_Id:",row['Patient_Id']," First_Name:",row['First_Name']," Last_Name:", row['Last_Name']," Contact_No:", row['Contact_No'])
 
         elif(opti == 6):
             pno = int(input("Pno: "))
@@ -76,20 +73,18 @@ def info(opti):
                 return -1
 
             res = cur.fetchall()
-            print("Pno   Complaint   Diagnosis");
             for row in res:
-                print(row['Pno'], row['Complaint'], row['Diagnosis'])
+            	print("Pno:",row['Pno']," Complaint:", row['Complaint']," Diagnosis:",row['Diagnosis'])
 
         elif(opti == 7):
             billno = int(input("Bill_No: "))
-            query = "select Amount from Bill where Bill_No = %d " % (billno)
+            query = "select Bill_No, Amount from Bill where Bill_No = %d " % (billno)
             if(qexec(query)):
                 return -1
 
             res = cur.fetchall()
-            print("Amount");
             for row in res:
-                print(row['Amount'])
+            	print("Bill_No:",row['Bill_No']," Amount:", row['Amount'])
 
         elif(opti == 8):
             dno = int(input("Dno: "))
@@ -98,13 +93,8 @@ def info(opti):
                 return -1
 
             res = cur.fetchall()
-            print("DNo   Dname   Location_Block   Location_Floor");
             for row in res:
-                print(
-                    row['DNo'],
-                    row['Dname'],
-                    row['Location_Block'],
-                    row['Location_Floor'])
+            	print("DNo:",row['Dno']," Dname:", row['Dname']," Location_Block:",row['Location_Block']," Location_Floor:", row['Location_Floor'])
 
         elif(opti == 9):
             medname = input("Medicine Name: ")
@@ -114,9 +104,8 @@ def info(opti):
                 return -1
 
             res = cur.fetchall()
-            print("Batch_No   Qty");
             for row in res:
-                print(row['Batch_No'], row['Qty'])
+            	print("Batch_No:",row['Batch_No']," Qty:", row['Qty'])
 
         else:
             print("Error: Invalid Option")
