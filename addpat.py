@@ -79,7 +79,7 @@ def addpat():
             if(addins(patient["Patient_Id"])):
                 return -1
 
-        print("Success! Patient id of new patient = %d", patient["Patient_Id"])
+        print("Success! Patient id of new patient = ", patient["Patient_Id"])
         return 0
 
     except Exception as e:

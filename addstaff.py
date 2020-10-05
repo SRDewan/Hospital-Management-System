@@ -64,11 +64,12 @@ def adddoc(staff_id):
     if(qexec(query)):
         return -1;
 
-    heads["Staff_Id"] = staff_id
-    heads["Dno"] = works["Dno"]
-    query = "insert into Heads values(%d, %d)" % (heads["Dno"], heads["Staff_Id"]) 
-    if(qexec(query)):
-        return -1;
+    if(row == ()):
+        heads["Staff_Id"] = staff_id
+        heads["Dno"] = works["Dno"]
+        query = "insert into Heads values(%d, %d)" % (heads["Dno"], heads["Staff_Id"]) 
+        if(qexec(query)):
+            return -1;
 
     return 0
 
@@ -168,7 +169,7 @@ def addstaff():
             if(adddoc(staff["Staff_Id"])):
                 return -1
 
-        print("Success! Staff id of new member = %d", staff["Staff_Id"])
+        print("Success! Staff id of new member = ", staff["Staff_Id"])
         return 0
 
     except Exception as e:

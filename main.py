@@ -14,6 +14,8 @@ import info
 import analy
 import modstaff
 import modpat
+import modroom
+import modhead
 import misc
 
 inf = 1000000
@@ -82,6 +84,29 @@ def modify(opt):
             con.commit()
             return 0
 
+    elif(opt == 6):
+        if(bookroom()):
+            con.rollback
+            return -1
+        else:
+            con.commit()
+            return 0
+
+    elif(opt == 7):
+        if(modroom()):
+            con.rollback
+            return -1
+        else:
+            con.commit()
+            return 0
+
+    elif(opt == 8):
+        if(modhead()):
+            con.rollback
+            return -1
+        else:
+            con.commit()
+            return 0
     else:
         print("Error: Invalid Option")
 
@@ -163,15 +188,17 @@ def dispatch(ch):
         add(opt)
 
     elif(ch == 2):
-        print("1. Edit staff member details")
-        print("2. Edit patient details")
+        print("1. Edit Staff Member Details")
+        print("2. Edit Patient Details")
         print("3. Edit Appointment Details")
         print("4. Edit Test/Surgery Pricing")
         print("5. Edit Medication Pricing")
+        print("6. Book a Room")
+        print("7. Edit Room Tariff")
+        print("8. Edit Department Head")
         opt = int(input("Enter choice: "))
         tmp = sp.call('clear', shell=True)
         modify(opt)
-
 
     elif(ch == 3):
         print("1. Remove staff member")
@@ -295,6 +322,10 @@ while(1):
             from modstaff import modstaff
             modpat.cur = cur    
             from modpat import modpat
+            modroom.cur = cur    
+            from modroom import bookroom, modroom
+            modhead.cur = cur    
+            from modhead import modhead
 
             misc.cur = cur
             from misc import addAppointment, addMedication, addMedDetails, addBatchDetails, addSupplierDetails, addTestorSurgery, addTestPricing, addPrescription, createBill, entails, recommends, performs, schedules, updateAppointment, updateTestPricing, updateMedicationPricing
