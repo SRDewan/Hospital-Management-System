@@ -208,7 +208,7 @@ def recommends(pno):
     row["Med_Name"] = input("Medicine Name: ")
     row["Batch_No"] = int(input("Batch No: "))
     row["Bill_No"] = int(input("Bill No: "))
-    row["Dosage"] = input("Dosage: ")
+    row["Dosage"] = int(input("Dosage: "))
 
     query = "INSERT INTO Recommends VALUES ('%d', '%s', '%d', '%d', '%d')" % (row["Pno"], row["Med_Name"], row["Batch_No"], row["Bill_No"], row["Dosage"])
 
