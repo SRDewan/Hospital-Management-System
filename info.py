@@ -107,8 +107,47 @@ def info(opti):
             for row in res:
             	print("Batch_No:",row['Batch_No']," Qty:", row['Qty'])
 
-        else:
-            print("Error: Invalid Option")
+        elif(opti == 10):
+            name = input("First_Name: ")
+            query = """select * from Patient where First_Name = "%s" """ % (name)
+            if(qexec(query)):
+                return -1
+
+            res = cur.fetchall()
+            for row in res:
+            	print("Patient_Id:",row['Patient_Id']," First_Name:", row['First_Name']," Last_Name:", row['Last_Name']," H_No:", row['H_No']," Street:", row['Street']," City:", row['City']," Zipcode:", row['Zipcode']," Contact_No:", row['Contact_No']," Date_Of_Birth:", row['Date_Of_Birth'])
+
+        elif(opti == 11):
+            name = input("First_Name: ")
+            query = """select * from Staff where First_Name = "%s" """ % (name)
+            if(qexec(query)):
+                return -1
+
+            res = cur.fetchall()
+            for row in res:
+            	print("Staff_Id:",row['Staff_Id']," First_Name:", row['First_Name']," Last_Name:", row['Last_Name']," Sex:", row['Sex']," Salary:", row['Salary']," Contact_No:", row['Contact_No']," Date_Of_Birth:", row['Date_Of_Birth']," H_No:", row['H_No']," Street:", row['Street']," Zipcode:", row['Zipcode']," City:", row['City']," Job:", row['Job']," Supervisor_Id:", row['Supervisor_Id'])
+
+        elif(opti == 12):
+            medname = input("Medicine Name: ")
+            query = """select Med_Name, Expiry_Date, Batch_No, Qty from Batch_Details inner join Medication on Batch_Details.Batch_No= Medication.Batch_No where Med_Name = "%s" """ % (
+                medname)
+            if(qexec(query)):
+                return -1
+
+            res = cur.fetchall()
+            for row in res:
+            	print("Med_Name:",row['Med_Name'],"Expiry_Date:",row['Expiry_Date'],"Batch_No:",row['Batch_No']," Qty:", row['Qty'])
+
+        elif(opti == 13):
+            supname = input("Supplier Name: ")
+            query = """select * from Supplier_Details inner join Medication on Supplier_Details.Supplier_Id= Medication.Supplier_Id where Supplier_Name = "%s" """ % (
+                supname)
+            if(qexec(query)):
+                return -1
+
+            res = cur.fetchall()
+            for row in res:
+            	print("Med_Name:",row['Med_Name'],"Expiry_Date:",row['Expiry_Date'],"Batch_No:",row['Batch_No']," Supplier_Id:", row['Supplier_Id']," Supplier_Name:", row['Supplier_Name'])
 
         return 0
 
