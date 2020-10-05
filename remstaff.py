@@ -76,9 +76,20 @@ def delstaff():
     try:
         tmp = sp.call('clear', shell = True)
         sid = int(input("Enter Staff Id of staff member to be removed: "))
+        
+        query = """select * from Staff where Staff_Id = %d""" % (sid)
+        if(qexec(query)): 
+            return -1; 
+        res = cur.fetchall()
+        if(res == ()):
+            print("Invalid id. No such member.")
+            return -1
 
+        query = """delete from Education where Staff_Id = %d""" % (sid)
         query = """delete from Shift where Staff_Id = %d""" % (sid)
-        if(qexec(query)): return -1; 
+        if(qexec(query)): 
+            return -1; 
+
         query = """delete from Education where Staff_Id = %d""" % (sid)
         if(qexec(query)):
             return -1;
@@ -89,6 +100,8 @@ def delstaff():
         query = """delete from Staff where Staff_Id = %d""" % (sid)
         if(qexec(query)):
             return -1;
+
+        print("Success!")
         return 0
 
     except Exception as e:

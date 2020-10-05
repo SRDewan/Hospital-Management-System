@@ -514,7 +514,7 @@ DROP TABLE IF EXISTS `Room_Pricing`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Room_Pricing` (
   `Room_Type` varchar(255) NOT NULL,
-  `Hourly_Tariff` float NOT NULL,
+  `Hourly_Tariff` float NULL,
   PRIMARY KEY (`Room_Type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;

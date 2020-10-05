@@ -7,9 +7,12 @@ from datetime import datetime
 import exec
 import addstaff
 import addpat
+import addroom
 import remstaff
 import rempat
 import info
+import modstaff
+import modpat
 
 inf = 1000000
 
@@ -26,6 +29,27 @@ def remove(opt):
 
     elif(opt == 2):
         if(delpat()):
+            con.rollback
+            return -1
+        else:
+            con.commit()
+            return 0
+    else:
+        print("Error: Invalid Option")
+
+
+def modify(opt):
+
+    if(opt == 1):
+        if(modstaff()):
+            con.rollback
+            return -1
+        else:
+            con.commit()
+            return 0
+
+    elif(opt == 2):
+        if(modpat()):
             con.rollback
             return -1
         else:
@@ -52,6 +76,15 @@ def add(opt):
         else:
             con.commit()
             return 0
+
+    elif(opt == 3):
+        if(addroom()):
+            con.rollback
+            return -1
+        else:
+            con.commit()
+            return 0
+
     else:
         print("Error: Invalid Option")
 
@@ -61,11 +94,18 @@ def dispatch(ch):
     if(ch == 1):
         print("1. Add staff member")
         print("2. Add patient")
+        print("3. Add room")
         opt = int(input("Enter choice: "))
         tmp = sp.call('clear', shell=True)
         add(opt)
 
-    # elif(ch == 2):
+    elif(ch == 2):
+        print("1. Edit staff member details")
+        print("2. Edit patient details")
+        opt = int(input("Enter choice: "))
+        tmp = sp.call('clear', shell=True)
+        modify(opt)
+
 
     elif(ch == 3):
         print("1. Remove staff member")
@@ -156,16 +196,26 @@ while(1):
             exec.con = con
             exec.cur = cur
             from exec import qexec
+
             info.cur = cur
             from info import info
+
             remstaff.cur = cur
             from remstaff import delstaff, deldoc, deldept
             rempat.cur = cur
             from rempat import delpat, delins
+
             addstaff.cur = cur
             from addstaff import addstaff, addedu, adddoc, adddept, addshift
             addpat.cur = cur
             from addpat import addpat, addins
+            addroom.cur = cur
+            from addroom import addroom 
+
+            modstaff.cur = cur    
+            from modstaff import modstaff
+            modpat.cur = cur    
+            from modpat import modpat
 
             while(ret != 6):
                 tmp = sp.call('clear', shell=True)

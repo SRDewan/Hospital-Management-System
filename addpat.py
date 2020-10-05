@@ -79,7 +79,7 @@ def addpat():
             if(addins(patient["Patient_Id"])):
                 return -1
 
-        tmp = input("Enter any key to CONTINUE:")
+        print("Success! Patient id of new patient = %d", patient["Patient_Id"])
         return 0
 
     except Exception as e:

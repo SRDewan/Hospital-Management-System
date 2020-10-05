@@ -168,6 +168,7 @@ def addstaff():
             if(adddoc(staff["Staff_Id"])):
                 return -1
 
+        print("Success! Staff id of new member = %d", staff["Staff_Id"])
         return 0
 
     except Exception as e:
