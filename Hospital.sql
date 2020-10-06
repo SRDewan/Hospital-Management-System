@@ -19,6 +19,10 @@
 -- Table structure for table `Appointment`
 --
 
+DROP DATABASE IF EXISTS `Hospital`;
+CREATE DATABASE Hospital;
+USE Hospital;
+
 DROP TABLE IF EXISTS `Appointment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -600,7 +604,7 @@ CREATE TABLE `Shift` (
 
 LOCK TABLES `Shift` WRITE;
 /*!40000 ALTER TABLE `Shift` DISABLE KEYS */;
-INSERT INTO `Shift` VALUES (374598,'11:00:00','17:00:00','Monday'),(554380,'08:00:00','16:00:00','Thursday'),(554380,'14:00:00','22:00:00','Tuesday'),(983313,'08:00:00','16:00:00','Monday'),(983313,'08:00:00','16:00:00','Wednesday'),(983313,'13:00:00','21:00:00','Friday');
+INSERT INTO `Shift` VALUES (374598,'08:00:00','21:00:00','Wednesday'),(374598,'11:00:00','17:00:00','Monday'),(554380,'08:00:00','16:00:00','Thursday'),(554380,'14:00:00','22:00:00','Tuesday'),(983313,'08:00:00','16:00:00','Monday'),(983313,'08:00:00','16:00:00','Wednesday'),(983313,'13:00:00','21:00:00','Friday');
 /*!40000 ALTER TABLE `Shift` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -809,4 +813,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-10-06 17:59:29
+-- Dump completed on 2020-10-06 18:18:12

@@ -90,20 +90,25 @@ def addedu(staff_id):
 
 def addshift(staff_id):
     
-    tmp = sp.call('clear', shell = True)
-    more = "y"
-    shift = {}
-    while(more == "y"):
-        shift["Staff_Id"] = staff_id
-        shift["Shift_Day"] = (input("Shift Day: "))
-        shift["Shift_Start_Time"] = (input("Shift Start Time (HH:MM:SS): "))
-        shift["Shift_End_Time"] = (input("Shift End Time (HH:MM:SS): "))
-        query = """insert into Shift values(%d, "%s", "%s", "%s")""" % (shift["Staff_Id"], shift["Shift_Start_Time"], shift["Shift_End_Time"], shift["Shift_Day"])
-        if(qexec(query)):
-            continue
-        more = input("Do you wish to enter more shifts(y / n): ")
+    try:
+        tmp = sp.call('clear', shell = True)
+        more = "y"
+        shift = {}
+        while(more == "y"):
+            shift["Staff_Id"] = staff_id
+            shift["Shift_Day"] = (input("Shift Day: "))
+            shift["Shift_Start_Time"] = (input("Shift Start Time (HH:MM:SS): "))
+            shift["Shift_End_Time"] = (input("Shift End Time (HH:MM:SS): "))
+            query = """insert into Shift values(%d, "%s", "%s", "%s")""" % (shift["Staff_Id"], shift["Shift_Start_Time"], shift["Shift_End_Time"], shift["Shift_Day"])
+            if(qexec(query)):
+                continue
+            more = input("Do you wish to enter more shifts(y / n): ")
 
-    return 0
+        return 0
+
+    except Exception as e:
+        print("Error: ", e)
+        return -1
 
 def addstaff():
 

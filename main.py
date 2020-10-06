@@ -179,6 +179,23 @@ def add(opt):
             con.commit()
             return 0
 
+    elif(opt == 8):
+
+        try:
+            tmp = sp.call('clear', shell = True)
+            staff_id = int(input("Enter staff id whose shift is to be added: "))
+            if(addshift(staff_id)):
+                con.rollback
+                return -1
+            else:
+                con.commit()
+                print("Success!")
+                return 0
+
+        except Exception as e:
+            print("Error: ", e)
+            return -1
+
     else:
         print("Error: Invalid Option")
 
