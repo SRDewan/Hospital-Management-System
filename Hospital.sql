@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.7.31, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: Hospital
+-- Host: localhost    Database: Hospital
 -- ------------------------------------------------------
--- Server version	8.0.21
+-- Server version	5.7.31-0ubuntu0.18.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -48,8 +48,8 @@ DROP TABLE IF EXISTS `Batch_Details`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Batch_Details` (
-  `Batch_No` int NOT NULL,
-  `Qty` int NOT NULL,
+  `Batch_No` int(11) NOT NULL,
+  `Qty` int(11) NOT NULL,
   PRIMARY KEY (`Batch_No`),
   CONSTRAINT `Batch_Details_ibfk_1` FOREIGN KEY (`Batch_No`) REFERENCES `Medication` (`Batch_No`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -73,8 +73,8 @@ DROP TABLE IF EXISTS `Bill`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Bill` (
-  `Bill_No` int NOT NULL,
-  `Amount` int NOT NULL,
+  `Bill_No` int(11) NOT NULL,
+  `Amount` int(11) NOT NULL,
   `Date` date NOT NULL,
   `Time` time NOT NULL,
   `Payment_Status` char(1) NOT NULL DEFAULT '0',
@@ -99,9 +99,9 @@ DROP TABLE IF EXISTS `Department`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Department` (
-  `Dno` int NOT NULL,
+  `Dno` int(11) NOT NULL,
   `Dname` varchar(255) NOT NULL,
-  `Location_Floor` int NOT NULL,
+  `Location_Floor` int(11) NOT NULL,
   `Location_Block` varchar(255) NOT NULL,
   PRIMARY KEY (`Dno`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -113,7 +113,8 @@ CREATE TABLE `Department` (
 
 LOCK TABLES `Department` WRITE;
 /*!40000 ALTER TABLE `Department` DISABLE KEYS */;
-INSERT INTO `Department` VALUES (12,'ENT',2,'32');
+INSERT INTO `Department` VALUES (12,'Emergency',2,'32');
+INSERT INTO `Department` VALUES (1,'ENT',2,'A');
 /*!40000 ALTER TABLE `Department` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -125,8 +126,8 @@ DROP TABLE IF EXISTS `Doctor`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Doctor` (
-  `Staff_Id` int NOT NULL,
-  `Consultation_Fee` int NOT NULL,
+  `Staff_Id` int(11) NOT NULL,
+  `Consultation_Fee` int(11) NOT NULL,
   PRIMARY KEY (`Staff_Id`),
   CONSTRAINT `Doctor_ibfk_1` FOREIGN KEY (`Staff_Id`) REFERENCES `Staff` (`Staff_Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -139,6 +140,7 @@ CREATE TABLE `Doctor` (
 LOCK TABLES `Doctor` WRITE;
 /*!40000 ALTER TABLE `Doctor` DISABLE KEYS */;
 INSERT INTO `Doctor` VALUES (374598,500);
+INSERT INTO `Doctor` VALUES (554380,6000),(983313,10000);
 /*!40000 ALTER TABLE `Doctor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -150,7 +152,7 @@ DROP TABLE IF EXISTS `Education`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Education` (
-  `Staff_Id` int NOT NULL,
+  `Staff_Id` int(11) NOT NULL,
   `Degree` varchar(255) NOT NULL,
   PRIMARY KEY (`Staff_Id`,`Degree`),
   CONSTRAINT `Education_ibfk_1` FOREIGN KEY (`Staff_Id`) REFERENCES `Staff` (`Staff_Id`)
@@ -164,6 +166,7 @@ CREATE TABLE `Education` (
 LOCK TABLES `Education` WRITE;
 /*!40000 ALTER TABLE `Education` DISABLE KEYS */;
 INSERT INTO `Education` VALUES (374598,'MBBS');
+INSERT INTO `Education` VALUES (554380,'MBBS'),(983313,'MBBS'),(983313,'PHD');
 /*!40000 ALTER TABLE `Education` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -175,10 +178,10 @@ DROP TABLE IF EXISTS `Entails`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Entails` (
-  `Pno` int NOT NULL,
+  `Pno` int(11) NOT NULL,
   `Date` date DEFAULT NULL,
   `Time` time DEFAULT NULL,
-  `Bill_No` int NOT NULL,
+  `Bill_No` int(11) NOT NULL,
   PRIMARY KEY (`Pno`),
   KEY `Date` (`Date`),
   KEY `Bill_No` (`Bill_No`),
@@ -207,8 +210,8 @@ DROP TABLE IF EXISTS `Heads`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Heads` (
-  `Dno` int NOT NULL,
-  `Staff_Id` int NOT NULL,
+  `Dno` int(11) NOT NULL,
+  `Staff_Id` int(11) NOT NULL,
   PRIMARY KEY (`Dno`),
   KEY `Staff_Id` (`Staff_Id`),
   CONSTRAINT `Heads_ibfk_1` FOREIGN KEY (`Dno`) REFERENCES `Department` (`Dno`),
@@ -224,6 +227,7 @@ CREATE TABLE `Heads` (
 LOCK TABLES `Heads` WRITE;
 /*!40000 ALTER TABLE `Heads` DISABLE KEYS */;
 INSERT INTO `Heads` VALUES (12,374598);
+INSERT INTO `Heads` VALUES (1,983313);
 /*!40000 ALTER TABLE `Heads` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -235,7 +239,7 @@ DROP TABLE IF EXISTS `Insured_Details`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Insured_Details` (
-  `Insurance_Id` int NOT NULL,
+  `Insurance_Id` int(11) NOT NULL,
   `Company` varchar(255) NOT NULL,
   `Latest_Renewal_Date` date NOT NULL,
   PRIMARY KEY (`Insurance_Id`)
@@ -248,6 +252,7 @@ CREATE TABLE `Insured_Details` (
 
 LOCK TABLES `Insured_Details` WRITE;
 /*!40000 ALTER TABLE `Insured_Details` DISABLE KEYS */;
+INSERT INTO `Insured_Details` VALUES (85623,'LIC','2019-10-01');
 /*!40000 ALTER TABLE `Insured_Details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -259,8 +264,8 @@ DROP TABLE IF EXISTS `Insured_Patients`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Insured_Patients` (
-  `Patient_Id` int NOT NULL,
-  `Insurance_Id` int NOT NULL,
+  `Patient_Id` int(11) NOT NULL,
+  `Insurance_Id` int(11) NOT NULL,
   PRIMARY KEY (`Patient_Id`),
   KEY `Insurance_Id` (`Insurance_Id`),
   CONSTRAINT `Insured_Patients_ibfk_1` FOREIGN KEY (`Patient_Id`) REFERENCES `Patient` (`Patient_Id`),
@@ -274,6 +279,7 @@ CREATE TABLE `Insured_Patients` (
 
 LOCK TABLES `Insured_Patients` WRITE;
 /*!40000 ALTER TABLE `Insured_Patients` DISABLE KEYS */;
+INSERT INTO `Insured_Patients` VALUES (244472,85623);
 /*!40000 ALTER TABLE `Insured_Patients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -312,9 +318,9 @@ DROP TABLE IF EXISTS `Medication`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Medication` (
   `Med_Name` varchar(255) NOT NULL,
-  `Batch_No` int NOT NULL,
+  `Batch_No` int(11) NOT NULL,
   `Expiry_Date` date NOT NULL,
-  `Supplier_Id` int NOT NULL,
+  `Supplier_Id` int(11) NOT NULL,
   PRIMARY KEY (`Med_Name`,`Batch_No`),
   KEY `Batch_No` (`Batch_No`),
   KEY `Supplier_Id` (`Supplier_Id`),
@@ -340,17 +346,16 @@ DROP TABLE IF EXISTS `Patient`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Patient` (
-  `Patient_Id` int NOT NULL,
+  `Patient_Id` int(11) NOT NULL,
   `First_Name` varchar(255) NOT NULL,
   `Last_Name` varchar(255) NOT NULL,
-  `H_No` int DEFAULT NULL,
+  `H_No` int(11) DEFAULT NULL,
   `Street` varchar(255) DEFAULT NULL,
   `City` varchar(255) DEFAULT NULL,
-  `Zipcode` int DEFAULT NULL,
-  `Contact_No` bigint DEFAULT NULL,
+  `Zipcode` int(11) DEFAULT NULL,
+  `Contact_No` bigint(20) DEFAULT NULL,
   `Date_Of_Birth` date NOT NULL,
-  PRIMARY KEY (`Patient_Id`),
-  CONSTRAINT `Patient_chk_1` CHECK (((`Contact_No` >= 1000000000) and (`Contact_No` <= 9999999999)))
+  PRIMARY KEY (`Patient_Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -360,7 +365,8 @@ CREATE TABLE `Patient` (
 
 LOCK TABLES `Patient` WRITE;
 /*!40000 ALTER TABLE `Patient` DISABLE KEYS */;
-INSERT INTO `Patient` VALUES (399815,'Debayan','Saha',NULL,'','',NULL,1234567890,'2001-01-01');
+INSERT INTO `Patient` VALUES (399815,'Chirag','Sahu',NULL,'','',NULL,1234567890,'2001-08-25');
+INSERT INTO `Patient` VALUES (244472,'Debayan','Saha',NULL,'','',NULL,9234076187,'2001-07-28'),(787961,'Jayant','Panwar',NULL,'','',NULL,9120934785,'2001-06-15');
 /*!40000 ALTER TABLE `Patient` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -372,9 +378,9 @@ DROP TABLE IF EXISTS `Pays`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Pays` (
-  `Bill_No` int NOT NULL,
-  `Patient_Id` int NOT NULL,
-  `Staff_Id` int NOT NULL,
+  `Bill_No` int(11) NOT NULL,
+  `Patient_Id` int(11) NOT NULL,
+  `Staff_Id` int(11) NOT NULL,
   PRIMARY KEY (`Bill_No`),
   KEY `Patient_Id` (`Patient_Id`),
   KEY `Staff_Id` (`Staff_Id`),
@@ -403,8 +409,8 @@ DROP TABLE IF EXISTS `Performs`;
 CREATE TABLE `Performs` (
   `Date` date NOT NULL,
   `Time` time NOT NULL,
-  `Staff_Id` int NOT NULL,
-  `Room_No` int NOT NULL,
+  `Staff_Id` int(11) NOT NULL,
+  `Room_No` int(11) NOT NULL,
   PRIMARY KEY (`Date`,`Time`),
   KEY `Staff_Id` (`Staff_Id`),
   KEY `Room_No` (`Room_No`),
@@ -433,7 +439,7 @@ DROP TABLE IF EXISTS `Prescription`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Prescription` (
-  `Pno` int NOT NULL,
+  `Pno` int(11) NOT NULL,
   `Complaint` varchar(255) NOT NULL,
   `Diagnosis` varchar(255) NOT NULL,
   PRIMARY KEY (`Pno`),
@@ -458,11 +464,11 @@ DROP TABLE IF EXISTS `Recommends`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Recommends` (
-  `Pno` int NOT NULL,
+  `Pno` int(11) NOT NULL,
   `Med_Name` varchar(255) DEFAULT NULL,
-  `Batch_No` int DEFAULT NULL,
-  `Bill_No` int NOT NULL,
-  `Dosage` int DEFAULT NULL,
+  `Batch_No` int(11) DEFAULT NULL,
+  `Bill_No` int(11) NOT NULL,
+  `Dosage` int(11) DEFAULT NULL,
   PRIMARY KEY (`Pno`),
   KEY `Med_Name` (`Med_Name`),
   KEY `Bill_No` (`Bill_No`),
@@ -491,8 +497,8 @@ DROP TABLE IF EXISTS `Room`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Room` (
-  `Room_No` int NOT NULL,
-  `Location_Floor` int NOT NULL,
+  `Room_No` int(11) NOT NULL,
+  `Location_Floor` int(11) NOT NULL,
   `Location_Block` varchar(255) NOT NULL,
   `Room_Type` varchar(255) NOT NULL,
   `Available` tinyint(1) NOT NULL,
@@ -508,6 +514,7 @@ CREATE TABLE `Room` (
 
 LOCK TABLES `Room` WRITE;
 /*!40000 ALTER TABLE `Room` DISABLE KEYS */;
+INSERT INTO `Room` VALUES (1,1,'A','General Ward',1);
 /*!40000 ALTER TABLE `Room` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -520,7 +527,7 @@ DROP TABLE IF EXISTS `Room_Pricing`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Room_Pricing` (
   `Room_Type` varchar(255) NOT NULL,
-  `Hourly_Tariff` float DEFAULT NULL,
+  `Hourly_Tariff` int(11) DEFAULT NULL,
   PRIMARY KEY (`Room_Type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -531,6 +538,7 @@ CREATE TABLE `Room_Pricing` (
 
 LOCK TABLES `Room_Pricing` WRITE;
 /*!40000 ALTER TABLE `Room_Pricing` DISABLE KEYS */;
+INSERT INTO `Room_Pricing` VALUES ('General Ward',2000);
 /*!40000 ALTER TABLE `Room_Pricing` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -542,11 +550,11 @@ DROP TABLE IF EXISTS `Schedules`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Schedules` (
-  `Staff_Id` int NOT NULL,
+  `Staff_Id` int(11) NOT NULL,
   `Time` time NOT NULL,
   `Date` date NOT NULL,
-  `Pno` int NOT NULL,
-  `Patient_Id` int NOT NULL,
+  `Pno` int(11) NOT NULL,
+  `Patient_Id` int(11) NOT NULL,
   `Duration` varchar(255) NOT NULL,
   PRIMARY KEY (`Pno`),
   KEY `Staff_Id` (`Staff_Id`),
@@ -578,13 +586,12 @@ DROP TABLE IF EXISTS `Shift`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Shift` (
-  `Staff_Id` int NOT NULL,
+  `Staff_Id` int(11) NOT NULL,
   `Shift_Start_Time` time NOT NULL,
   `Shift_End_Time` time NOT NULL,
   `Shift_Day` varchar(255) NOT NULL,
   PRIMARY KEY (`Staff_Id`,`Shift_Start_Time`,`Shift_End_Time`,`Shift_Day`),
-  CONSTRAINT `Shift_ibfk_1` FOREIGN KEY (`Staff_Id`) REFERENCES `Staff` (`Staff_Id`),
-  CONSTRAINT `Shift_chk_1` CHECK (((`Shift_Day` = _utf8mb3'Monday') or (`Shift_Day` = _utf8mb3'Tuesday') or (`Shift_Day` = _utf8mb3'Wednesday') or (`Shift_Day` = _utf8mb3'Thursday') or (`Shift_Day` = _utf8mb3'Friday') or (`Shift_Day` = _utf8mb3'Saturday') or (`Shift_Day` = _utf8mb3'Sunday')))
+  CONSTRAINT `Shift_ibfk_1` FOREIGN KEY (`Staff_Id`) REFERENCES `Staff` (`Staff_Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -595,6 +602,7 @@ CREATE TABLE `Shift` (
 LOCK TABLES `Shift` WRITE;
 /*!40000 ALTER TABLE `Shift` DISABLE KEYS */;
 INSERT INTO `Shift` VALUES (374598,'11:00:00','17:00:00','Monday');
+INSERT INTO `Shift` VALUES (554380,'08:00:00','16:00:00','Thursday'),(554380,'09:00:00','18:00:00','Saturday'),(554380,'14:00:00','22:00:00','Tuesday'),(983313,'08:00:00','16:00:00','Monday'),(983313,'08:00:00','16:00:00','Wednesday'),(983313,'13:00:00','21:00:00','Friday');
 /*!40000 ALTER TABLE `Shift` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -606,7 +614,7 @@ DROP TABLE IF EXISTS `Specialisation`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Specialisation` (
-  `Staff_Id` int NOT NULL,
+  `Staff_Id` int(11) NOT NULL,
   `Expertise_Area` varchar(255) NOT NULL,
   PRIMARY KEY (`Staff_Id`,`Expertise_Area`),
   CONSTRAINT `Specialisation_ibfk_1` FOREIGN KEY (`Staff_Id`) REFERENCES `Doctor` (`Staff_Id`)
@@ -620,6 +628,7 @@ CREATE TABLE `Specialisation` (
 LOCK TABLES `Specialisation` WRITE;
 /*!40000 ALTER TABLE `Specialisation` DISABLE KEYS */;
 INSERT INTO `Specialisation` VALUES (374598,'ENT');
+INSERT INTO `Specialisation` VALUES (554380,'ENT'),(983313,'Dermatology'),(983313,'ENT');
 /*!40000 ALTER TABLE `Specialisation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -631,25 +640,22 @@ DROP TABLE IF EXISTS `Staff`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Staff` (
-  `Staff_Id` int NOT NULL,
+  `Staff_Id` int(11) NOT NULL,
   `First_Name` varchar(255) NOT NULL,
   `Last_Name` varchar(255) NOT NULL,
   `Sex` char(1) NOT NULL,
-  `Salary` int NOT NULL,
-  `Contact_No` bigint DEFAULT NULL,
+  `Salary` int(11) NOT NULL,
+  `Contact_No` bigint(20) DEFAULT NULL,
   `Date_Of_Birth` date NOT NULL,
-  `H_No` int DEFAULT NULL,
+  `H_No` int(11) DEFAULT NULL,
   `Street` varchar(255) DEFAULT NULL,
-  `Zipcode` int DEFAULT NULL,
+  `Zipcode` int(11) DEFAULT NULL,
   `City` varchar(255) DEFAULT NULL,
   `Job` varchar(255) NOT NULL,
-  `Supervisor_Id` int DEFAULT NULL,
+  `Supervisor_Id` int(11) DEFAULT NULL,
   PRIMARY KEY (`Staff_Id`),
   KEY `Supervisor_Id` (`Supervisor_Id`),
-  CONSTRAINT `Staff_ibfk_1` FOREIGN KEY (`Supervisor_Id`) REFERENCES `Doctor` (`Staff_Id`),
-  CONSTRAINT `Staff_chk_1` CHECK (((`Sex` = _latin1'M') or (`Sex` = _latin1'F'))),
-  CONSTRAINT `Staff_chk_2` CHECK (((`Contact_No` >= 1000000000) and (`Contact_No` <= 9999999999))),
-  CONSTRAINT `Staff_chk_3` CHECK (((`Job` = _utf8mb3'Doctor') or (`Job` = _utf8mb3'Nurse') or (`Job` = _utf8mb3'Accountant') or (`Job` = _utf8mb3'Others')))
+  CONSTRAINT `Staff_ibfk_1` FOREIGN KEY (`Supervisor_Id`) REFERENCES `Doctor` (`Staff_Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -660,6 +666,7 @@ CREATE TABLE `Staff` (
 LOCK TABLES `Staff` WRITE;
 /*!40000 ALTER TABLE `Staff` DISABLE KEYS */;
 INSERT INTO `Staff` VALUES (374598,'Joe','Mama','M',100000,1234567890,'1973-07-14',12,'3',201019,'','Doctor',NULL);
+INSERT INTO `Staff` VALUES (554380,'Dayitva','Goel','M',15000,9267402764,'2001-01-01',NULL,'',NULL,'','Doctor',983313),(983313,'Shaurya','Dewan','M',25000,9652676483,'2001-09-18',NULL,'',NULL,'','Doctor',NULL);
 /*!40000 ALTER TABLE `Staff` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -671,10 +678,10 @@ DROP TABLE IF EXISTS `Stays_In`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Stays_In` (
-  `Bill_No` int NOT NULL,
-  `Patient_Id` int NOT NULL,
-  `Room_No` int NOT NULL,
-  `Duration` varchar(255) NOT NULL,
+  `Bill_No` int(11) NOT NULL,
+  `Patient_Id` int(11) NOT NULL,
+  `Room_No` int(11) NOT NULL,
+  `Duration` int(11) NOT NULL,
   PRIMARY KEY (`Bill_No`),
   KEY `Patient_Id` (`Patient_Id`),
   KEY `Room_No` (`Room_No`),
@@ -701,7 +708,7 @@ DROP TABLE IF EXISTS `Supplier_Details`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Supplier_Details` (
-  `Supplier_Id` int NOT NULL,
+  `Supplier_Id` int(11) NOT NULL,
   `Supplier_Name` varchar(255) NOT NULL,
   PRIMARY KEY (`Supplier_Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -778,8 +785,8 @@ DROP TABLE IF EXISTS `Works_In`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Works_In` (
-  `Staff_Id` int NOT NULL,
-  `Dno` int NOT NULL,
+  `Staff_Id` int(11) NOT NULL,
+  `Dno` int(11) NOT NULL,
   PRIMARY KEY (`Staff_Id`),
   KEY `Dno` (`Dno`),
   CONSTRAINT `Works_In_ibfk_1` FOREIGN KEY (`Staff_Id`) REFERENCES `Doctor` (`Staff_Id`)
@@ -793,6 +800,7 @@ CREATE TABLE `Works_In` (
 LOCK TABLES `Works_In` WRITE;
 /*!40000 ALTER TABLE `Works_In` DISABLE KEYS */;
 INSERT INTO `Works_In` VALUES (374598,12);
+INSERT INTO `Works_In` VALUES (554380,1),(983313,1);
 /*!40000 ALTER TABLE `Works_In` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -805,4 +813,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-10-06 13:07:53
+-- Dump completed on 2020-10-06 12:39:12
