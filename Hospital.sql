@@ -19,6 +19,10 @@
 -- Table structure for table `Appointment`
 --
 
+DROP DATABASE IF EXISTS `Hospital`;
+CREATE DATABASE Hospital;
+USE Hospital;
+
 DROP TABLE IF EXISTS `Appointment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
