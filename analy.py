@@ -130,6 +130,9 @@ def analy(optio):
             res = cur.fetchall()
             for row in res:
                 print("Staff_Id:", row['Staff_Id']," Count:",row['count(Patient_Id)'])
+        
+        else:
+            print("Error: Invalid Option")
 
         return 0
 

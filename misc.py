@@ -195,29 +195,44 @@ def recommends(pno):
     row = {}
     
     row["Pno"] = pno
-    row["Med_Name"] = input("Medicine Name: ")
-    row["Batch_No"] = int(input("Batch No: "))
-    row["Dosage"] = int(input("Dosage: "))
 
-    query = "SELECT Price FROM Med_Details WHERE Med_Name = '%s'" % (row["Med_Name"])
+    medornot = "K"
+    while medornot != "Y" and medornot != "N":
+        medornot = input("Has any medication been prescribed? (Y/N): ")
 
-    if qexec(query):
-        return -1
+    if medornot == "Y":
+        row["Med_Name"] = input("Medicine Name: ")
+        row["Batch_No"] = int(input("Batch No: "))
+        row["Dosage"] = int(input("Dosage: "))
 
-    ids = cur.fetchall()
+        query = "SELECT Price FROM Med_Details WHERE Med_Name = '%s'" % (row["Med_Name"])
 
-    global medprice
-    for med in ids:
-        medprice = med["Price"]
+        if qexec(query):
+            return -1
 
-    global dosage
-    dosage = row["Dosage"]
+        ids = cur.fetchall()
+
+        global medprice
+        for med in ids:
+            medprice = med["Price"]
+
+        global dosage
+        dosage = row["Dosage"]
+
+    else:
+        row["Med_Name"] = "NULL"
+        row["Batch_No"] = "NULL"
+        row["Dosage"] = "NULL"
 
     global billno 
     billno = createBill()
     row["Bill_No"] = billno
 
-    query = "INSERT INTO Recommends VALUES ('%d', '%s', '%d', '%d', '%d')" % (row["Pno"], row["Med_Name"], row["Batch_No"], row["Bill_No"], row["Dosage"])
+    if medornot == "Y":
+        query = "INSERT INTO Recommends VALUES ('%d', '%s', '%d', '%d', '%d')" % (row["Pno"], row["Med_Name"], row["Batch_No"], row["Bill_No"], row["Dosage"])
+
+    else:
+        query = "INSERT INTO Recommends VALUES ('%d', %s, %s, %s, '%d')" % (row["Pno"], row["Med_Name"], row["Batch_No"], row["Bill_No"], row["Dosage"])
 
     if qexec(query):
         return -1

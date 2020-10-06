@@ -157,6 +157,9 @@ def info(opti):
             for row in res:
                 print("Staff_Id:",row['Staff_Id']," First_Name:", row['First_Name']," Last_Name:", row['Last_Name']," Sex:", row['Sex']," Salary:", row['Salary']," Contact_No:", row['Contact_No']," Date_Of_Birth:", row['Date_Of_Birth']," H_No:", row['H_No']," Street:", row['Street']," Zipcode:", row['Zipcode']," City:", row['City']," Job:", row['Job']," Supervisor_Id:", row['Supervisor_Id'])
 
+        else:
+            print("Error: Invalid Option")
+        
         return 0
 
     except Exception as e:
