@@ -33,7 +33,16 @@ def bookroom():
             return -1; 
         sched = cur.fetchall()
 
-        dur = (input("Enter stay duration: "))
+        dur = int(input("Enter stay duration (number of hours rounded up): "))
+
+        query = """select * from Room_Pricing where Room_Type = "%s" """ % (res[0]["Room_Type"])
+        if(qexec(query)): 
+            return -1; 
+        pri = cur.fetchall()
+        query = """update Bill set Amount = %d where Bill_No = %d""" % (pri[0]["Hourly_Tariff"] * dur, bno)
+        if(qexec(query)): 
+            return -1; 
+        ent = cur.fetchall()
 
         query = """insert into Stays_In values(%d, %d, %d, "%s")""" % (bno, sched[0]["Patient_Id"], rno, dur)
         if(qexec(query)):
