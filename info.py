@@ -8,7 +8,7 @@ def info(opti):
 
     try:
         if(opti == 1):
-            query = "select * from Room where Available =1"
+            query = "SELECT * FROM Room WHERE Available = 1"
             if(qexec(query)):
                 return -1
 
@@ -18,7 +18,7 @@ def info(opti):
 
         elif(opti == 2):
             shift = input("Shift Day: ")
-            query = """select First_Name, Last_Name from Staff inner join Shift on Staff.Staff_Id= Shift.Staff_Id where Shift_Day = "%s" """ % (
+            query = """SELECT First_Name, Last_Name FROM Staff INNER JOIN Shift on Staff.Staff_Id= Shift.Staff_Id WHERE Shift_Day = "%s" """ % (
                 shift)
             if(qexec(query)):
                 return -1
@@ -29,7 +29,7 @@ def info(opti):
 
         elif(opti == 3):
             spec = input("Specialisation: ")
-            query = """select First_Name, Last_Name from Staff inner join Specialisation on Staff.Staff_Id= Specialisation.Staff_Id where Expertise_Area = "%s" """ % (
+            query = """SELECT First_Name, Last_Name FROM Staff INNER JOIN Specialisation on Staff.Staff_Id= Specialisation.Staff_Id WHERE Expertise_Area = "%s" """ % (
                 spec)
             if(qexec(query)):
                 return -1
@@ -40,14 +40,14 @@ def info(opti):
 
         elif(opti == 4):
             comp = input("Companyname: ")
-            query = """select Insurance_Id from Insured_Details where Company = "%s" """ % (comp)
+            query = """SELECT Insurance_Id FROM Insured_Details WHERE Company = "%s" """ % (comp)
             if(qexec(query)):
                 return -1
             res = cur.fetchall()
 
             for row in res:
             	num=row['Insurance_Id']
-            	que = """select First_Name, Last_Name from Patient inner join Insured_Patients on Patient.Patient_Id= Insured_Patients.Patient_Id where Insurance_Id = %d """ % (
+            	que = """SELECT First_Name, Last_Name FROM Patient INNER JOIN Insured_Patients on Patient.Patient_Id= Insured_Patients.Patient_Id WHERE Insurance_Id = %d """ % (
                 num)
             	if(qexec(que)):
             		return -1
@@ -57,7 +57,7 @@ def info(opti):
 
         elif(opti == 5):
             patno = int(input("Patient_Id: "))
-            query = "select Patient_Id, First_Name, Last_Name, Contact_No from Patient where Patient_Id = %d " % (
+            query = "SELECT Patient_Id, First_Name, Last_Name, Contact_No FROM Patient WHERE Patient_Id = %d " % (
                 patno)
             if(qexec(query)):
                 return -1
@@ -68,7 +68,7 @@ def info(opti):
 
         elif(opti == 6):
             pno = int(input("Pno: "))
-            query = "select * from Prescription where Pno = %d " % (pno)
+            query = "SELECT * FROM Prescription WHERE Pno = %d " % (pno)
             if(qexec(query)):
                 return -1
 
@@ -78,7 +78,7 @@ def info(opti):
 
         elif(opti == 7):
             billno = int(input("Bill_No: "))
-            query = "select Bill_No, Amount from Bill where Bill_No = %d " % (billno)
+            query = "SELECT Bill_No, Amount FROM Bill WHERE Bill_No = %d " % (billno)
             if(qexec(query)):
                 return -1
 
@@ -88,7 +88,7 @@ def info(opti):
 
         elif(opti == 8):
             dno = int(input("Dno: "))
-            query = "select * from Department where Dno = %d " % (dno)
+            query = "SELECT * FROM Department WHERE Dno = %d " % (dno)
             if(qexec(query)):
                 return -1
 
@@ -98,18 +98,18 @@ def info(opti):
 
         elif(opti == 9):
             medname = input("Medicine Name: ")
-            query = """select Batch_No, Qty from Batch_Details inner join Medication on Batch_Details.Batch_No= Medication.Batch_No where Med_Name = "%s" """ % (
-                medname)
+            query = """SELECT Batch_No, Qty FROM Batch_Details INNER JOIN Medication on Batch_Details.Batch_No = Medication.Batch_No WHERE Med_Name = "%s" """ % (medname)
             if(qexec(query)):
                 return -1
 
             res = cur.fetchall()
-            for row in res:
-            	print("Batch_No:",row['Batch_No']," Qty:", row['Qty'])
+            print(res)
+            #for row in res:
+                #print("Batch_No:",row['Batch_No']," Qty:", row['Qty'])
 
         elif(opti == 10):
             name = input("First_Name: ")
-            query = """select * from Patient where First_Name = "%s" """ % (name)
+            query = """SELECT * FROM Patient WHERE First_Name = "%s" """ % (name)
             if(qexec(query)):
                 return -1
 
@@ -119,7 +119,7 @@ def info(opti):
 
         elif(opti == 11):
             name = input("First_Name: ")
-            query = """select * from Staff where First_Name = "%s" """ % (name)
+            query = """SELECT * FROM Staff WHERE First_Name = "%s" """ % (name)
             if(qexec(query)):
                 return -1
 
@@ -129,7 +129,7 @@ def info(opti):
 
         elif(opti == 12):
             medname = input("Medicine Name: ")
-            query = """select Med_Name, Expiry_Date, Batch_No, Qty from Batch_Details inner join Medication on Batch_Details.Batch_No= Medication.Batch_No where Med_Name = "%s" """ % (
+            query = """SELECT Med_Name, Expiry_Date, Batch_No, Qty FROM Batch_Details INNER JOIN Medication on Batch_Details.Batch_No= Medication.Batch_No WHERE Med_Name = "%s" """ % (
                 medname)
             if(qexec(query)):
                 return -1
@@ -140,7 +140,7 @@ def info(opti):
 
         elif(opti == 13):
             supname = input("Supplier Name: ")
-            query = """select * from Supplier_Details inner join Medication on Supplier_Details.Supplier_Id= Medication.Supplier_Id where Supplier_Name = "%s" """ % (
+            query = """SELECT * FROM Supplier_Details INNER JOIN Medication on Supplier_Details.Supplier_Id= Medication.Supplier_Id WHERE Supplier_Name = "%s" """ % (
                 supname)
             if(qexec(query)):
                 return -1

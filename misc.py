@@ -7,6 +7,7 @@ inf = 1000000
 
 medprice = 0
 testprice = 0
+dosage = 0
 
 def addSupplierDetails(supplier_id):
     row = {}
@@ -164,8 +165,6 @@ def schedules(appdate, apptime):
                 flag = 1
                 break
 
-    print("Please enter Scheduling details")
-
     row["Staff_Id"] = int(input("Staff Id: "))
     row["Patient_Id"] = int(input("Patient Id: "))
     row["Time"] = apptime
@@ -209,6 +208,8 @@ def recommends(pno):
     row["Batch_No"] = int(input("Batch No: "))
     row["Bill_No"] = int(input("Bill No: "))
     row["Dosage"] = int(input("Dosage: "))
+
+    dosage = row["Dosage"]
 
     query = "INSERT INTO Recommends VALUES ('%d', '%s', '%d', '%d', '%d')" % (row["Pno"], row["Med_Name"], row["Batch_No"], row["Bill_No"], row["Dosage"])
 
@@ -298,7 +299,7 @@ def createBill():
     while(row["Payment_Status"] != "Y" or row["Payment_Status"] != "N"):
         row["Payment_Status"] = input("Payment Status (Y/N): ")
     
-    row["Amount"] = medprice + testprice
+    row["Amount"] = (medprice*dosage) + testprice
 
     query = "INSERT INTO Bill VALUES ('%d', '%d', '%s', '%s', '%s')" % (row["Bill_No"], row["Amount"], row["Date"], row["Time"], row["Payment_Status"])
 
