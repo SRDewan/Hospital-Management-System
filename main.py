@@ -17,6 +17,7 @@ import modstaff
 import modpat
 import modroom
 import modhead
+import modtest
 import misc
 
 inf = 1000000
@@ -112,6 +113,14 @@ def modify(opt):
 
     elif(opt == 9):
         if(updatePaymentStatus()):
+            con.rollback
+            return -1
+        else:
+            con.commit()
+            return 0
+
+    elif(opt == 10):
+        if(modtest()):
             con.rollback
             return -1
         else:
@@ -234,6 +243,7 @@ def dispatch(ch):
             print("7. Edit Room Tariff")
             print("8. Edit Department Head")
             print("9. Edit Bill Payment Status")
+            print("10. Update Test/Surgery Result")
             print("")
             print("Press ENTER to go back")
             opt = int(input("Enter choice: "))
@@ -408,6 +418,8 @@ while(1):
             from modroom import bookroom, modroom
             modhead.cur = cur    
             from modhead import modhead
+            modtest.cur = cur    
+            from modtest import modtest
 
             misc.cur = cur
             from misc import addAppointment, addMedication, addMedDetails, addBatchDetails, addSupplierDetails, addTestorSurgery, addTestPricing, addPrescription, createBill, entails, recommends, performs, schedules, updateAppointment, updateTestPricing, updateMedicationPricing, updatePaymentStatus

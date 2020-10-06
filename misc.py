@@ -200,24 +200,27 @@ def recommends(pno):
     while medornot != "Y" and medornot != "N":
         medornot = input("Has any medication been prescribed? (Y/N): ")
 
-    if medornot == "Y":
-        row["Med_Name"] = input("Medicine Name: ")
-        row["Batch_No"] = int(input("Batch No: "))
-        row["Dosage"] = int(input("Dosage: "))
+        if medornot == "Y":
+            row["Med_Name"] = input("Medicine Name: ")
+            row["Batch_No"] = int(input("Batch No: "))
+            row["Dosage"] = int(input("Dosage: "))
 
-        query = "SELECT Price FROM Med_Details WHERE Med_Name = '%s'" % (row["Med_Name"])
+            query = "SELECT Price FROM Med_Details WHERE Med_Name = '%s'" % (row["Med_Name"])
 
-        if qexec(query):
-            return -1
+            if qexec(query):
+                return -1
 
-        ids = cur.fetchall()
+            ids = cur.fetchall()
 
-        global medprice
-        for med in ids:
-            medprice = med["Price"]
+            global medprice
+            for med in ids:
+                medprice = med["Price"]
 
-        global dosage
-        dosage = row["Dosage"]
+            global dosage
+            dosage = row["Dosage"]
+            query = """UPDATE Batch_Details SET Qty = Qty - %d WHERE Batch_No = %d""" % (dosage, row["Batch_No"])
+            if(qexec(query)):
+                return -1
 
     else:
         row["Med_Name"] = "NULL"

@@ -25,9 +25,13 @@ def fee(res):
 def supid(res):
 
     print("Current supervisor id = ", res["Supervisor_Id"])    
-    num = int(input("Enter new supervisor id: "))
+    inp = (input("*Enter new supervisor id: "))
+    if(inp == ""):
+        num = "NULL"
+    else:
+        num = int(inp)
 
-    query = "update Staff set Supervisor_Id = %d where Staff_Id = %d" % (num, res["Staff_Id"])
+    query = "update Staff set Supervisor_Id = %s where Staff_Id = %d" % (num, res["Staff_Id"])
     if(qexec(query)):
         return -1
 
