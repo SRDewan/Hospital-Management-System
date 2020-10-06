@@ -8,8 +8,8 @@ import exec
 import addstaff
 import addpat
 import addroom
-import remstaff
-import rempat
+import remshift
+import remappt
 import info
 import analy
 import modstaff
@@ -24,7 +24,7 @@ inf = 1000000
 def remove(opt):
 
     if(opt == 1):
-        if(delstaff()):
+        if(delshift()):
             con.rollback
             return -1
         else:
@@ -32,12 +32,13 @@ def remove(opt):
             return 0
 
     elif(opt == 2):
-        if(delpat()):
+        if(delappt()):
             con.rollback
             return -1
         else:
             con.commit()
             return 0
+
     else:
         print("Error: Invalid Option")
 
@@ -192,6 +193,7 @@ def dispatch(ch):
         print("5. Add Medication")
         print("6. Add Test/Surgery")
         print("7. Add Prescription")
+        print("8. Add Staff Member Shift")
         opt = int(input("Enter choice: "))
         tmp = sp.call('clear', shell=True)
         add(opt)
@@ -211,8 +213,8 @@ def dispatch(ch):
         modify(opt)
 
     elif(ch == 3):
-        print("1. Remove staff member")
-        print("2. Remove patient")
+        print("1. Delete Staff Member Shift")
+        print("2. Delete Appointment")
         opt = int(input("Enter choice: "))
         tmp = sp.call('clear', shell=True)
         remove(opt)
@@ -323,10 +325,10 @@ while(1):
             analy.cur = cur
             from analy import analy
 
-            remstaff.cur = cur
-            from remstaff import delstaff, deldoc, deldept
-            rempat.cur = cur
-            from rempat import delpat, delins
+            remshift.cur = cur
+            from remshift import delshift
+            remappt.cur = cur
+            from remappt import delappt
 
             addstaff.cur = cur
             from addstaff import addstaff, addedu, adddoc, adddept, addshift

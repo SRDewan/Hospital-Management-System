@@ -39,10 +39,9 @@ def bookroom():
         if(qexec(query)): 
             return -1; 
         pri = cur.fetchall()
-        query = """update Bill set Amount = %d where Bill_No = %d""" % (pri[0]["Hourly_Tariff"] * dur, bno)
+        query = """update Bill set Amount = %d, Payment_Status = "N" where Bill_No = %d""" % (pri[0]["Hourly_Tariff"] * dur, bno)
         if(qexec(query)): 
             return -1; 
-        ent = cur.fetchall()
 
         query = """insert into Stays_In values(%d, %d, %d, "%s")""" % (bno, sched[0]["Patient_Id"], rno, dur)
         if(qexec(query)):
@@ -52,7 +51,7 @@ def bookroom():
         if(qexec(query)):
             return -1
 
-        print("Success!")
+        print("Success! New bill amount = ", pri[0]["Hourly_Tariff"] * dur)
         return 0
 
     except Exception as e:
