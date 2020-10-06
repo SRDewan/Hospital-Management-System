@@ -432,7 +432,7 @@ CREATE TABLE `Prescription` (
   `Complaint` varchar(255) NOT NULL,
   `Diagnosis` varchar(255) NOT NULL,
   PRIMARY KEY (`Pno`),
-  CONSTRAINT `Prescription_ibfk_1` FOREIGN KEY (`Pno`) REFERENCES `Schedules` (`Pno`),
+  CONSTRAINT `Prescription_ibfk_1` FOREIGN KEY (`Pno`) REFERENCES `Schedules` (`Pno`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
