@@ -3,6 +3,7 @@ import random
 from datetime import datetime
 
 from exec import qexec
+shifts = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
 def info(opti):
 
@@ -17,7 +18,11 @@ def info(opti):
             	print("Room_No:",row['Room_No']," Location_Block:",row['Location_Block']," Location_Floor:", row['Location_Floor']," Room_Type:", row['Room_Type'])
 
         elif(opti == 2):
-            shift = input("Shift Day: ")
+            
+            shift = "Holiday"
+            while shift not in shifts:
+                shift= (input("Shift Day: "))
+
             query = """SELECT First_Name, Last_Name FROM Staff INNER JOIN Shift on Staff.Staff_Id= Shift.Staff_Id WHERE Shift_Day = "%s" """ % (
                 shift)
             if(qexec(query)):

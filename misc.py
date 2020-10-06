@@ -367,6 +367,10 @@ def updateTestPricing():
     
     ids = cur.fetchall()
 
+    if ids == ():
+        print("No such test type found")
+        return -1
+
     for row in ids:
         print("The current cost for this test type is: {}".format(row["Cost"]))
 
@@ -390,6 +394,10 @@ def updateMedicationPricing():
     
     ids = cur.fetchall()
 
+    if ids == ():
+        print("No such medication found")
+        return -1
+
     for row in ids:
         print("The current price for this medicine is: {}".format(row["Price"]))
 
@@ -406,18 +414,26 @@ def updateMedicationPricing():
 def updateAppointment():
     tmp = sp.call('clear', shell=True)
     adate = input("Enter date of the appointment: ")
-    query = "SELECT Time FROM Appointment WHERE Date = '%s'" % (adate)
+    atime = input("Enter time of the appointment: ")
+
+    query = "SELECT Date, Time FROM Appointment WHERE Date = '%s' AND Time = '%s'" % (adate, atime)
 
     if qexec(query):
         return -1
     
     ids = cur.fetchall()
 
-    for row in ids:
-        print("The patient has an appointment scheduled on this date at: {}".format(row["Time"]))
+    if ids == ():
+        print("No appointment found on this date and time")
+        return -1
 
-    atime = input("Enter the new time of the appointment: ")
-    query = "UPDATE Appointment SET Time = '%s' WHERE Date = '%s'" % (atime, adate)
+    for row in ids:
+        print("The patient has an appointment scheduled on {} at time {}".format(row["Date"], row["Time"]))
+
+    newdate = input("Enter the new date of the appointment: ")
+    newtime = input("Enter the new time of the appointment: ")
+
+    query = "UPDATE Appointment SET Time = '%s', Date = '%s' WHERE Date = '%s' AND Time = '%s'" % (newtime, newdate, adate, atime)
 
     if qexec(query):
         return -1
@@ -430,14 +446,16 @@ def updatePaymentStatus():
     tmp = sp.call('clear', shell=True)
     billnum = int(input("Enter Bill Number: "))
 
-    ids = {}
-    while ids == {}:
-        query = "SELECT Payment_Status FROM Bill WHERE Bill_No = '%d'" % (billnum)
+    query = "SELECT Payment_Status FROM Bill WHERE Bill_No = '%d'" % (billnum)
 
-        if qexec(query):
-            return -1
-        
-        ids = cur.fetchall()
+    if qexec(query):
+        return -1
+    
+    ids = cur.fetchall()
+
+    if ids == ():
+        print("No such Bill Number found")
+        return -1
 
     for row in ids:
         print("The current status of this bill is: {}".format(row["Payment_Status"]))

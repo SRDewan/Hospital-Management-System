@@ -52,7 +52,13 @@ def addpat():
         name = (input("Name (Fname Lname): ")).split(' ')
         patient["First_Name"] = name[0]
         patient["Last_Name"] = name[1]
-        patient["Contact_No"] = int(input("Contact Number(10 digit): "))
+
+        patient["Contact_No"] = "12"
+        while len(patient["Contact_No"]) != 10:
+            patient["Contact_No"] = input("Contact Number(10 digit): ")
+
+        patient["Contact_No"] = int(patient["Contact_No"])
+
         patient["Date_of_Birth"] = (input("Birth Date (YYYY-MM-DD): "))
 
         hno = (input("*House Number: "))
@@ -74,8 +80,11 @@ def addpat():
         if(qexec(query)):
             return -1
 
-        insure = input("Is the patient insured(y / n): ")
-        if(insure == "y"):
+        insure = "K"
+        while insure != "Y" and insure != "N":
+            insure = input("Is the patient insured (Y/N): ")
+
+        if(insure == "Y"):
             if(addins(patient["Patient_Id"])):
                 return -1
 

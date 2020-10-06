@@ -327,7 +327,7 @@ def dispatch(ch):
     else:
         print("Error: Invalid Option")
 
-    tmp = input("Enter any key to CONTINUE:")
+    tmp = input("Press ENTER to CONTINUE:")
     return 0
 
 

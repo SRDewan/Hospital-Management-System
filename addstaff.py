@@ -4,6 +4,8 @@ from datetime import datetime
 
 from exec import qexec
 inf = 1000000
+shifts = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+jobs = ["Doctor", "Nurse", "Receptionist", "Other"]
 
 def adddept(dno, staff_id):
         
@@ -34,20 +36,20 @@ def adddoc(staff_id):
     if(qexec(query)):
         return -1;
 
-    more = "y"
-    while(more == "y"):
+    more = "Y"
+    while(more == "Y"):
         special["Staff_Id"] = staff_id
         special["Expertise_Area"] = input("Expertise Area: ")
         query = """insert into Specialisation values(%d, "%s")""" % (special["Staff_Id"], special["Expertise_Area"])
         if(qexec(query)):
             continue
-        more = input("Do you wish to enter more expertise areas(y / n): ")
+        more = input("Do you wish to enter more expertise areas (Y/N): ")
 
     works["Staff_Id"] = staff_id
     row = ()
-    dnew = "n"
+    dnew = "N"
 
-    while(row == () and dnew != "y"):
+    while(row == () and dnew != "Y"):
         works["Dno"] = int(input("Department Number: "))
         query = "select Dno from Works_In where Dno = %d" % (works["Dno"])
         if(qexec(query)):
@@ -55,8 +57,8 @@ def adddoc(staff_id):
         row = cur.fetchall()
 
         if(row == ()):
-            dnew = input("Department does not exist. Would you like to create a new department(y / n): ")
-            if(dnew == "y"):
+            dnew = input("Department does not exist. Would you like to create a new department (Y/N): ")
+            if(dnew == "Y"):
                 if(adddept(works["Dno"], staff_id)):
                     return -1;
 
@@ -76,15 +78,15 @@ def adddoc(staff_id):
 def addedu(staff_id):
 
     tmp = sp.call('clear', shell = True)
-    more = "y"
+    more = "Y"
     education = {}
-    while(more == "y"):
+    while(more == "Y"):
         education["Staff_Id"] = staff_id
         education["Degree"] = input("Degree: ")
         query = """insert into Education values(%d, "%s")""" % (education["Staff_Id"], education["Degree"])
         if(qexec(query)):
             continue 
-        more = input("Do you wish to enter more degrees(y / n): ")
+        more = input("Do you wish to enter more degrees (Y/N): ")
 
     return 0
 
@@ -92,17 +94,21 @@ def addshift(staff_id):
     
     try:
         tmp = sp.call('clear', shell = True)
-        more = "y"
+        more = "Y"
         shift = {}
-        while(more == "y"):
+        while(more == "Y"):
             shift["Staff_Id"] = staff_id
-            shift["Shift_Day"] = (input("Shift Day: "))
+
+            shift["Shift_Day"] = "Holiday"
+            while shift["Shift_Day"] not in shifts:
+                shift["Shift_Day"] = (input("Shift Day: "))
+
             shift["Shift_Start_Time"] = (input("Shift Start Time (HH:MM:SS): "))
             shift["Shift_End_Time"] = (input("Shift End Time (HH:MM:SS): "))
             query = """insert into Shift values(%d, "%s", "%s", "%s")""" % (shift["Staff_Id"], shift["Shift_Start_Time"], shift["Shift_End_Time"], shift["Shift_Day"])
             if(qexec(query)):
                 continue
-            more = input("Do you wish to enter more shifts(y / n): ")
+            more = input("Do you wish to enter more shifts (Y/N): ")
 
         return 0
 
@@ -135,9 +141,19 @@ def addstaff():
         name = (input("Name (Fname Lname): ")).split(' ')
         staff["First_Name"] = name[0]
         staff["Last_Name"] = name[1]
-        staff["Sex"] = input("Sex (F/M): ")
+
+        staff["Sex"] = "K"
+        while staff["Sex"] != "F" and staff["Sex"] != "M":
+            staff["Sex"] = input("Sex (F/M): ")
+        
         staff["Salary"] = int(input("Salary: "))
-        staff["Contact_No"] = int(input("Contact Number(10 digit): "))
+        
+        staff["Contact_No"] = "12"
+        while len(staff["Contact_No"]) != 10:
+            staff["Contact_No"] = input("Contact Number(10 digit): ")
+
+        staff["Contact_No"] = int(staff["Contact_No"])
+        
         staff["Date_of_Birth"] = (input("Birth Date (YYYY-MM-DD): "))
 
         hno = (input("*House Number: "))
@@ -154,7 +170,11 @@ def addstaff():
             staff["Zipcode"] = int(zip)
         
         staff["City"] = (input("*City: "))
-        staff["Job"] = (input("Job(Doctor / Nurse / Receptionist / Other): "))
+
+        staff["Job"] = "Cleaner"
+        while staff["Job"] not in jobs:
+            staff["Job"] = (input("Job(Doctor / Nurse / Receptionist / Other): "))
+            
         sid = input("*Supervisor Id: ")
         if(sid != ""):
             staff["Supervisor_Id"] = int(sid)

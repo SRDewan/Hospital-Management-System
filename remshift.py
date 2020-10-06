@@ -3,6 +3,7 @@ import random
 from datetime import datetime
 
 from exec import qexec
+shifts = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
 def delshift():
 
@@ -11,7 +12,10 @@ def delshift():
         sid = int(input("Enter Staff Id whose shift is to be removed: "))
         shst = (input("Enter Shift Start Time (HH:MM:Ss): "))
         shet = (input("Enter Shift End Time (HH:MM:Ss): "))
-        sd = (input("Enter Shift Day: "))
+
+        sd = "Holiday"
+        while sd not in shifts:
+            sd = (input("Shift Day: "))
         
         query = """select * from Shift where Staff_Id = %d and Shift_Start_Time = "%s" and Shift_End_Time = "%s" and Shift_Day = "%s" """ % (sid, shst, shet, sd)
         if(qexec(query)): 
