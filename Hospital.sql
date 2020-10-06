@@ -19,10 +19,6 @@
 -- Table structure for table `Appointment`
 --
 
-DROP DATABASE IF EXISTS `Hospital`;
-CREATE DATABASE Hospital;
-USE Hospital;
-
 DROP TABLE IF EXISTS `Appointment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -40,6 +36,7 @@ CREATE TABLE `Appointment` (
 
 LOCK TABLES `Appointment` WRITE;
 /*!40000 ALTER TABLE `Appointment` DISABLE KEYS */;
+INSERT INTO `Appointment` VALUES ('12:00:00','2020-09-09');
 /*!40000 ALTER TABLE `Appointment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -64,6 +61,7 @@ CREATE TABLE `Batch_Details` (
 
 LOCK TABLES `Batch_Details` WRITE;
 /*!40000 ALTER TABLE `Batch_Details` DISABLE KEYS */;
+INSERT INTO `Batch_Details` VALUES (12,590);
 /*!40000 ALTER TABLE `Batch_Details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -115,6 +113,7 @@ CREATE TABLE `Department` (
 
 LOCK TABLES `Department` WRITE;
 /*!40000 ALTER TABLE `Department` DISABLE KEYS */;
+INSERT INTO `Department` VALUES (12,'ENT',2,'32');
 /*!40000 ALTER TABLE `Department` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -139,6 +138,7 @@ CREATE TABLE `Doctor` (
 
 LOCK TABLES `Doctor` WRITE;
 /*!40000 ALTER TABLE `Doctor` DISABLE KEYS */;
+INSERT INTO `Doctor` VALUES (374598,500);
 /*!40000 ALTER TABLE `Doctor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -163,6 +163,7 @@ CREATE TABLE `Education` (
 
 LOCK TABLES `Education` WRITE;
 /*!40000 ALTER TABLE `Education` DISABLE KEYS */;
+INSERT INTO `Education` VALUES (374598,'MBBS');
 /*!40000 ALTER TABLE `Education` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -222,6 +223,7 @@ CREATE TABLE `Heads` (
 
 LOCK TABLES `Heads` WRITE;
 /*!40000 ALTER TABLE `Heads` DISABLE KEYS */;
+INSERT INTO `Heads` VALUES (12,374598);
 /*!40000 ALTER TABLE `Heads` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -297,6 +299,7 @@ CREATE TABLE `Med_Details` (
 
 LOCK TABLES `Med_Details` WRITE;
 /*!40000 ALTER TABLE `Med_Details` DISABLE KEYS */;
+INSERT INTO `Med_Details` VALUES ('Paracetamol','Fanatol',20);
 /*!40000 ALTER TABLE `Med_Details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -325,6 +328,7 @@ CREATE TABLE `Medication` (
 
 LOCK TABLES `Medication` WRITE;
 /*!40000 ALTER TABLE `Medication` DISABLE KEYS */;
+INSERT INTO `Medication` VALUES ('Paracetamol',12,'2025-09-13',14);
 /*!40000 ALTER TABLE `Medication` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -356,6 +360,7 @@ CREATE TABLE `Patient` (
 
 LOCK TABLES `Patient` WRITE;
 /*!40000 ALTER TABLE `Patient` DISABLE KEYS */;
+INSERT INTO `Patient` VALUES (399815,'Debayan','Saha',NULL,'','',NULL,1234567890,'2001-01-01');
 /*!40000 ALTER TABLE `Patient` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -515,7 +520,7 @@ DROP TABLE IF EXISTS `Room_Pricing`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Room_Pricing` (
   `Room_Type` varchar(255) NOT NULL,
-  `Hourly_Tariff` float NULL,
+  `Hourly_Tariff` float DEFAULT NULL,
   PRIMARY KEY (`Room_Type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -561,6 +566,7 @@ CREATE TABLE `Schedules` (
 
 LOCK TABLES `Schedules` WRITE;
 /*!40000 ALTER TABLE `Schedules` DISABLE KEYS */;
+INSERT INTO `Schedules` VALUES (374598,'12:00:00','2020-09-09',97460,399815,'15');
 /*!40000 ALTER TABLE `Schedules` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -588,6 +594,7 @@ CREATE TABLE `Shift` (
 
 LOCK TABLES `Shift` WRITE;
 /*!40000 ALTER TABLE `Shift` DISABLE KEYS */;
+INSERT INTO `Shift` VALUES (374598,'11:00:00','17:00:00','Monday');
 /*!40000 ALTER TABLE `Shift` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -612,6 +619,7 @@ CREATE TABLE `Specialisation` (
 
 LOCK TABLES `Specialisation` WRITE;
 /*!40000 ALTER TABLE `Specialisation` DISABLE KEYS */;
+INSERT INTO `Specialisation` VALUES (374598,'ENT');
 /*!40000 ALTER TABLE `Specialisation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -651,6 +659,7 @@ CREATE TABLE `Staff` (
 
 LOCK TABLES `Staff` WRITE;
 /*!40000 ALTER TABLE `Staff` DISABLE KEYS */;
+INSERT INTO `Staff` VALUES (374598,'Joe','Mama','M',100000,1234567890,'1973-07-14',12,'3',201019,'','Doctor',NULL);
 /*!40000 ALTER TABLE `Staff` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -704,6 +713,7 @@ CREATE TABLE `Supplier_Details` (
 
 LOCK TABLES `Supplier_Details` WRITE;
 /*!40000 ALTER TABLE `Supplier_Details` DISABLE KEYS */;
+INSERT INTO `Supplier_Details` VALUES (14,'Vespers');
 /*!40000 ALTER TABLE `Supplier_Details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -727,6 +737,7 @@ CREATE TABLE `Test_Pricing` (
 
 LOCK TABLES `Test_Pricing` WRITE;
 /*!40000 ALTER TABLE `Test_Pricing` DISABLE KEYS */;
+INSERT INTO `Test_Pricing` VALUES ('Blood Test',500);
 /*!40000 ALTER TABLE `Test_Pricing` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -781,6 +792,7 @@ CREATE TABLE `Works_In` (
 
 LOCK TABLES `Works_In` WRITE;
 /*!40000 ALTER TABLE `Works_In` DISABLE KEYS */;
+INSERT INTO `Works_In` VALUES (374598,12);
 /*!40000 ALTER TABLE `Works_In` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -793,4 +805,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-10-04 16:34:37
+-- Dump completed on 2020-10-06 13:07:53
