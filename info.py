@@ -46,7 +46,7 @@ def info(opti):
             res = cur.fetchall()
 
             for row in res:
-            	num=row['Insurance_Id']
+            	num=int(row['Insurance_Id'])
             	que = """SELECT First_Name, Last_Name FROM Patient INNER JOIN Insured_Patients on Patient.Patient_Id= Insured_Patients.Patient_Id WHERE Insurance_Id = %d """ % (
                 num)
             	if(qexec(que)):
@@ -125,7 +125,7 @@ def info(opti):
 
             res = cur.fetchall()
             for row in res:
-            	print("Med_Name:",row['Med_Name'],"Expiry_Date:",row['Expiry_Date'],"Batch_No:",row['Batch_No']," Qty:", row['Qty'])
+            	print("Med_Name:",row['Med_Name'],"Expiry_Date:",row['Expiry_Date'],"Batch_No:",row['Batch_Details.Batch_No']," Qty:", row['Qty'])
 
         elif(opti == 12):
             supname = input("Supplier Name: ")
@@ -136,7 +136,7 @@ def info(opti):
 
             res = cur.fetchall()
             for row in res:
-            	print("Med_Name:",row['Med_Name']," Expiry_Date:",row['Expiry_Date'],"Batch_No:",row['Batch_No']," Supplier_Id:", row['Supplier_Id']," Supplier_Name:", row['Supplier_Name'])
+            	print("Med_Name:",row['Med_Name']," Expiry_Date:",row['Expiry_Date'],"Batch_No:",row['Batch_No']," Supplier_Id:", row['Supplier_Details.Supplier_Id']," Supplier_Name:", row['Supplier_Name'])
 
         elif(opti == 13):
             query = "SELECT * FROM Patient"
