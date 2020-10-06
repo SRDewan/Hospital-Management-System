@@ -232,7 +232,7 @@ def recommends(pno):
         query = "INSERT INTO Recommends VALUES ('%d', '%s', '%d', '%d', '%d')" % (row["Pno"], row["Med_Name"], row["Batch_No"], row["Bill_No"], row["Dosage"])
 
     else:
-        query = "INSERT INTO Recommends VALUES ('%d', %s, %s, %s, '%d')" % (row["Pno"], row["Med_Name"], row["Batch_No"], row["Bill_No"], row["Dosage"])
+        query = "INSERT INTO Recommends VALUES ('%d', %s, %s, '%d', %s)" % (row["Pno"], row["Med_Name"], row["Batch_No"], row["Bill_No"], row["Dosage"])
 
     if qexec(query):
         return -1
