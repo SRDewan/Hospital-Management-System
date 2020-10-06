@@ -222,10 +222,10 @@ def recommends(pno):
             if(qexec(query)):
                 return -1
 
-    else:
-        row["Med_Name"] = "NULL"
-        row["Batch_No"] = "NULL"
-        row["Dosage"] = "NULL"
+        else:
+            row["Med_Name"] = "NULL"
+            row["Batch_No"] = "NULL"
+            row["Dosage"] = "NULL"
 
     global billno 
     billno = createBill()
@@ -305,6 +305,19 @@ def entails(pno):
     else:
         query = "INSERT INTO Entails VALUES ('%d', %s, %s, '%d')" % (row["Pno"], row["Date"], row["Time"], row["Bill_No"])
 
+    if qexec(query):
+        return -1
+
+    query = "SELECT * FROM Schedules WHERE Pno = %d" % (pno)
+    if qexec(query):
+        return -1
+    x = cur.fetchall()
+    query = "SELECT * FROM Doctor WHERE Staff_Id = %d" % (x[0]["Staff_Id"])
+    if qexec(query):
+        return -1
+    y = cur.fetchall()
+
+    query = "UPDATE Bill SET Amount = Amount + %d WHERE Bill_No = %d" % (y[0]["Consultation_Fee"], billno)
     if qexec(query):
         return -1
 
