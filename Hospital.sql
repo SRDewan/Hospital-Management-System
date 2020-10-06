@@ -431,7 +431,8 @@ CREATE TABLE `Prescription` (
   `Pno` int NOT NULL,
   `Complaint` varchar(255) NOT NULL,
   `Diagnosis` varchar(255) NOT NULL,
-  PRIMARY KEY (`Pno`)
+  PRIMARY KEY (`Pno`),
+  CONSTRAINT `Prescription_ibfk_1` FOREIGN KEY (`Pno`) REFERENCES `Schedules` (`Pno`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -549,9 +550,8 @@ CREATE TABLE `Schedules` (
   KEY `Date` (`Date`),
   CONSTRAINT `Schedules_ibfk_1` FOREIGN KEY (`Staff_Id`) REFERENCES `Doctor` (`Staff_Id`),
   CONSTRAINT `Schedules_ibfk_2` FOREIGN KEY (`Time`) REFERENCES `Appointment` (`Time`),
-  CONSTRAINT `Schedules_ibfk_3` FOREIGN KEY (`Pno`) REFERENCES `Prescription` (`Pno`),
-  CONSTRAINT `Schedules_ibfk_4` FOREIGN KEY (`Patient_Id`) REFERENCES `Patient` (`Patient_Id`),
-  CONSTRAINT `Schedules_ibfk_5` FOREIGN KEY (`Date`) REFERENCES `Appointment` (`Date`)
+  CONSTRAINT `Schedules_ibfk_3` FOREIGN KEY (`Patient_Id`) REFERENCES `Patient` (`Patient_Id`),
+  CONSTRAINT `Schedules_ibfk_4` FOREIGN KEY (`Date`) REFERENCES `Appointment` (`Date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

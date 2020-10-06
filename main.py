@@ -277,7 +277,7 @@ while(1):
         port = int(iport)
     # username = "root"
     # password = "blahblah"
-    # host = "127.0.0.1"
+    # host = "localhost"
     # port = 5005
 
     try:
