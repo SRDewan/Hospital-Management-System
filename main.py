@@ -107,6 +107,15 @@ def modify(opt):
         else:
             con.commit()
             return 0
+
+    elif(opt == 9):
+        if(updatePaymentStatus()):
+            con.rollback
+            return -1
+        else:
+            con.commit()
+            return 0
+
     else:
         print("Error: Invalid Option")
 
@@ -196,6 +205,7 @@ def dispatch(ch):
         print("6. Book a Room")
         print("7. Edit Room Tariff")
         print("8. Edit Department Head")
+        print("9. Edit Bill Payment Status")
         opt = int(input("Enter choice: "))
         tmp = sp.call('clear', shell=True)
         modify(opt)
@@ -335,7 +345,7 @@ while(1):
             from modhead import modhead
 
             misc.cur = cur
-            from misc import addAppointment, addMedication, addMedDetails, addBatchDetails, addSupplierDetails, addTestorSurgery, addTestPricing, addPrescription, createBill, entails, recommends, performs, schedules, updateAppointment, updateTestPricing, updateMedicationPricing
+            from misc import addAppointment, addMedication, addMedDetails, addBatchDetails, addSupplierDetails, addTestorSurgery, addTestPricing, addPrescription, createBill, entails, recommends, performs, schedules, updateAppointment, updateTestPricing, updateMedicationPricing, updatePaymentStatus
 
             while(ret != 6):
                 tmp = sp.call('clear', shell=True)

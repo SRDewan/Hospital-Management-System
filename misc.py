@@ -7,6 +7,7 @@ inf = 1000000
 
 medprice = 0
 testprice = 0
+billno = 0
 dosage = 0
 
 def addSupplierDetails(supplier_id):
@@ -60,16 +61,6 @@ def addMedication():
     row["Expiry_Date"] = input("Expiry Date (YYYY-MM-DD): ")
     row["Supplier_Id"] = int(input("Supplier Id: "))
 
-    query = "SELECT Price FROM Med_Details WHERE Med_Name = '%d'" % (row["Med_Name"])
-
-    if qexec(query):
-        return -1
-
-    ids = cur.fetchall()
-
-    for row in ids:
-        medprice = row["Price"]
-
     query = "INSERT INTO Medication VALUES ('%s', '%d', '%s', '%d')" % (row["Med_Name"], row["Batch_No"], row["Expiry_Date"], row["Supplier_Id"])
 
     if addSupplierDetails(row["Supplier_Id"]):
@@ -108,8 +99,8 @@ def performs(tdate, ttime):
 
     row["Date"] = tdate
     row["Time"] = ttime
-    row["Staff_Id"] = int(input("Staff Id: "))
-    row["Room_No"] = int(input("Room No: "))
+    row["Staff_Id"] = int(input("Staff Id (of staff performing the test): "))
+    row["Room_No"] = int(input("Test Room No: "))
 
     query = "INSERT INTO Performs VALUES ('%s', '%s', '%d', '%d')" % (row["Date"], row["Time"], row["Staff_Id"], row["Room_No"])
 
@@ -123,19 +114,20 @@ def addTestorSurgery(edate, etime):
 
     row["Date"] = edate
     row["Time"] = etime
-    row["Duration"] = input("Test Duration: ")
+    row["Duration"] = input("Test Duration (in minutes): ")
     row["Type"] = input("Test Type: ")
     row["Result"] = input("Test Result: ")
 
-    query = "SELECT Cost FROM Test_Pricing WHERE Type= '%d'" % (row["Type"])
+    query = "SELECT Cost FROM Test_Pricing WHERE Type= '%s'" % (row["Type"])
 
     if qexec(query):
         return -1
 
     ids = cur.fetchall()
 
-    for row in ids:
-        testprice = row["Cost"]
+    global testprice
+    for test in ids:
+        testprice = test["Cost"]
 
     query = "INSERT INTO Test_or_Surgery VALUES ('%s', '%s', '%s', '%s', '%s')" % (row["Date"], row["Time"], row["Duration"], row["Type"], row["Result"])
 
@@ -169,14 +161,14 @@ def schedules(appdate, apptime):
     row["Patient_Id"] = int(input("Patient Id: "))
     row["Time"] = apptime
     row["Date"] = appdate
-    row["Duration"] = input("Duration: ")
+    row["Duration"] = input("Duration (in minutes): ")
 
     query = "INSERT INTO Schedules VALUES ('%d', '%s', '%s', '%d', '%d', '%s')" % (row["Staff_Id"], row["Time"], row["Date"], row["Pno"], row["Patient_Id"], row["Duration"])
 
     if qexec(query):
         return -1
 
-    return 0
+    return row["Pno"]
 
 def addAppointment():
     tmp = sp.call('clear', shell=True)
@@ -192,24 +184,38 @@ def addAppointment():
     if qexec(query):
         return -1
 
-    if schedules(row["Date"], row["Time"]):
-        return -1
+    pno = schedules(row["Date"], row["Time"])
 
     print("The appointment was created successfully!")
-    print("The prescription number (Pno) is: {}".format(row["Pno"]))
+    print("The prescription number (Pno) is: {}".format(pno))
 
     return 0
 
 def recommends(pno):
     row = {}
-
+    
     row["Pno"] = pno
     row["Med_Name"] = input("Medicine Name: ")
     row["Batch_No"] = int(input("Batch No: "))
-    row["Bill_No"] = int(input("Bill No: "))
     row["Dosage"] = int(input("Dosage: "))
 
+    query = "SELECT Price FROM Med_Details WHERE Med_Name = '%s'" % (row["Med_Name"])
+
+    if qexec(query):
+        return -1
+
+    ids = cur.fetchall()
+
+    global medprice
+    for med in ids:
+        medprice = med["Price"]
+
+    global dosage
     dosage = row["Dosage"]
+
+    global billno 
+    billno = createBill()
+    row["Bill_No"] = billno
 
     query = "INSERT INTO Recommends VALUES ('%d', '%s', '%d', '%d', '%d')" % (row["Pno"], row["Med_Name"], row["Batch_No"], row["Bill_No"], row["Dosage"])
 
@@ -258,16 +264,28 @@ def entails(pno):
     row = {}
 
     row["Pno"] = pno
-    row["Date"] = input("Date (YYYY-MM-DD): ")
-    row["Time"] = input("Time (HH:MM:SS): ")
-
-    if addTestorSurgery(row["Date"], row["Time"]):
-        return -1
-
-    billno = createBill()
     row["Bill_No"] = billno
 
-    query = "INSERT INTO Entails VALUES ('%d', '%s', '%s', '%d')" % (row["Pno"], row["Date"], row["Time"], row["Bill_No"])
+    testornot = "K"
+    while testornot != "Y" and testornot != "N":
+        testornot = input("Has any test/surgery been prescribed? (Y/N): ")
+
+    if testornot == "Y":
+        row["Date"] = input("Test Date (YYYY-MM-DD): ")
+        row["Time"] = input("Test Time (HH:MM:SS): ")
+
+    else:
+        row["Date"] = "NULL"
+        row["Time"] = "NULL"
+
+    if testornot == "Y":
+        if addTestorSurgery(row["Date"], row["Time"]):
+            return -1
+
+        query = "INSERT INTO Entails VALUES ('%d', '%s', '%s', '%d')" % (row["Pno"], row["Date"], row["Time"], row["Bill_No"])
+
+    else:
+        query = "INSERT INTO Entails VALUES ('%d', %s, %s, '%d')" % (row["Pno"], row["Date"], row["Time"], row["Bill_No"])
 
     if qexec(query):
         return -1
@@ -296,7 +314,7 @@ def createBill():
     row["Time"] = datetime.now().strftime("%H:%M:%S")
     
     row["Payment_Status"] = "K"
-    while(row["Payment_Status"] != "Y" or row["Payment_Status"] != "N"):
+    while row["Payment_Status"] != "Y" and row["Payment_Status"] != "N":
         row["Payment_Status"] = input("Payment Status (Y/N): ")
     
     row["Amount"] = (medprice*dosage) + testprice
@@ -374,5 +392,34 @@ def updateAppointment():
         return -1
 
     print("The appointment was updated successfully!")
+
+    return 0
+
+def updatePaymentStatus():
+    tmp = sp.call('clear', shell=True)
+    billnum = int(input("Enter Bill Number: "))
+
+    ids = {}
+    while ids == {}:
+        query = "SELECT Payment_Status FROM Bill WHERE Bill_No = '%d'" % (billnum)
+
+        if qexec(query):
+            return -1
+        
+        ids = cur.fetchall()
+
+    for row in ids:
+        print("The current status of this bill is: {}".format(row["Payment_Status"]))
+
+    status = "K"
+    while status != "Y" and status != "N":
+        status = input("Enter the new payment status for this bill (Y/N): ")
+    
+    query = "UPDATE Bill SET Payment_Status = '%s' WHERE Bill_No = '%d'" % (status, billnum)
+
+    if qexec(query):
+        return -1
+
+    print("The payment status was updated successfully!")
 
     return 0

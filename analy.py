@@ -80,7 +80,7 @@ def analy(optio):
 
         elif(optio == 8):
             patno = int(input("Patient_Id: "))
-            query = "select Bill.Bill_No, Amount from Bill inner join Pays on Bill.Bill_No=Pays.Bill_No where Patient_Id = %d and Payment_Status = "N" " % (patno)
+            query = """select Bill.Bill_No, Amount from Bill inner join Pays on Bill.Bill_No=Pays.Bill_No where Patient_Id = %d and Payment_Status = "N" """ % (patno)
             if(qexec(query)):
                 return -1
 
