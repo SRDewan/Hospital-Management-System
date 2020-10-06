@@ -260,24 +260,24 @@ def options():
 
 while(1):
 
-    # tmp = sp.call('clear', shell=True)
+    tmp = sp.call('clear', shell=True)
 
-    # username = input("Username: ")
-    # password = input("Password: ")
+    username = input("Username: ")
+    password = input("Password: ")
 
-    # host = input("*Host: ")
-    # if(host == ""):
-    #     host = "localhost"
+    host = input("*Host: ")
+    if(host == ""):
+        host = "localhost"
 
-    # iport = input("*Port: ")
-    # if(iport == ""):
-    #     port = 3306
-    # else:
-    #     port = int(iport)
-    username = "root"
-    password = "blahblah"
-    host = "localhost"
-    port = 5005
+    iport = input("*Port: ")
+    if(iport == ""):
+        port = 3306
+    else:
+        port = int(iport)
+    # username = "root"
+    # password = "blahblah"
+    # host = "localhost"
+    # port = 5005
 
     try:
         con = pymysql.connect(host=host,
