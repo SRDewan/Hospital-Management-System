@@ -216,11 +216,12 @@ def dispatch(ch):
         print("6. Show complaint and diagonosis of particular prescription")
         print("7. Show bill amount for particular bill")
         print("8. Show details of particular department")
-        print("9. Show quantity of particular medicine")
-        print("10. Show details of particular patient using patient's name")
-        print("11. Show details of particular staff using staff's name")
-        print("12. Show details of particular medicine using medicine's name")
-        print("13. Show details of particular medicine using supplier's name")
+        print("9. Show details of particular patient using patient's name")
+        print("10. Show details of particular staff using staff's name")
+        print("11. Show details of particular medicine using medicine's name")
+        print("12. Show details of particular medicine using supplier's name")
+        print("13. Show details of all patient")
+        print("14. Show details of all staff")
         opti = int(input("Enter choice: "))
         tmp = sp.call('clear', shell=True)
         info(opti)
@@ -260,24 +261,24 @@ def options():
 
 while(1):
 
-    # tmp = sp.call('clear', shell=True)
+    tmp = sp.call('clear', shell=True)
 
-    # username = input("Username: ")
-    # password = input("Password: ")
+    username = input("Username: ")
+    password = input("Password: ")
 
-    # host = input("*Host: ")
-    # if(host == ""):
-    #     host = "localhost"
+    host = input("*Host: ")
+    if(host == ""):
+        host = "localhost"
 
-    # iport = input("*Port: ")
-    # if(iport == ""):
-    #     port = 3306
-    # else:
-    #     port = int(iport)
-    username = "root"
-    password = "blahblah"
-    host = "localhost"
-    port = 5005
+    iport = input("*Port: ")
+    if(iport == ""):
+        port = 3306
+    else:
+        port = int(iport)
+    # username = "root"
+    # password = "blahblah"
+    # host = "127.0.0.1"
+    # port = 5005
 
     try:
         con = pymysql.connect(host=host,
