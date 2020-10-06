@@ -21,7 +21,7 @@ def addroom():
         tariff = (input("Hourly Tariff: "))
 
         if(tariff != ""):
-            roompr["Hourly_Tariff"] = float(tariff)
+            roompr["Hourly_Tariff"] = int(tariff)
         else:
             roompr["Hourly_Tariff"] = "NULL"
 
