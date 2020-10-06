@@ -139,7 +139,7 @@ def addTestorSurgery(edate, etime):
 
     return 0
 
-def schedules(appdate, apptime):
+def schedules(appdate, apptime, aid):
     row = {}
 
     flag = 1
@@ -161,9 +161,10 @@ def schedules(appdate, apptime):
     row["Patient_Id"] = int(input("Patient Id: "))
     row["Time"] = apptime
     row["Date"] = appdate
+    row["Id"] = aid
     row["Duration"] = input("Duration (in minutes): ")
 
-    query = "INSERT INTO Schedules VALUES ('%d', '%s', '%s', '%d', '%d', '%s')" % (row["Staff_Id"], row["Time"], row["Date"], row["Pno"], row["Patient_Id"], row["Duration"])
+    query = "INSERT INTO Schedules VALUES ('%d', '%s', '%s', %d, '%d', '%d', '%s')" % (row["Staff_Id"], row["Time"], row["Date"], row["Id"], row["Pno"], row["Patient_Id"], row["Duration"])
 
     if qexec(query):
         return -1
@@ -179,12 +180,18 @@ def addAppointment():
     row["Date"] = input("Date (YYYY-MM-DD): ")
     row["Time"] = input("Time (HH:MM:SS): ")
 
-    query = "INSERT INTO Appointment VALUES ('%s', '%s')" % (row["Time"], row["Date"])
+    query = "INSERT INTO Appointment(Time, Date) VALUES ('%s', '%s')" % (row["Time"], row["Date"])
 
     if qexec(query):
         return -1
 
-    pno = schedules(row["Date"], row["Time"])
+    query = "SELECT LAST_INSERT_ID()"
+
+    if qexec(query):
+        return -1
+    aid = cur.fetchone()
+
+    pno = schedules(row["Date"], row["Time"], aid["LAST_INSERT_ID()"])
 
     print("The appointment was created successfully!")
     print("The prescription number (Pno) is: {}".format(pno))
@@ -275,7 +282,7 @@ def addPrescription():
     if entails(pno):
         return -1
 
-    print("The prescription was created successfully!")
+    print("The prescription was created successfully! Associated Bill Number = ", billno)
     return 0
 
 def entails(pno):
@@ -411,12 +418,27 @@ def updateMedicationPricing():
 
     return 0
 
+def updateSchedules(adate, atime, apid, newdate, newtime, newid):
+
+    query = "SELECT Pno FROM Schedules WHERE Date = '%s' AND Time = '%s' AND Patient_Id = %d" % (adate, atime, apid)
+
+    if qexec(query):
+        return -1
+    
+    pno = cur.fetchall()
+
+    query = "UPDATE Schedules SET Date = '%s', Time = '%s', Id = %d WHERE Pno = %d" % (newdate, newtime, newid, pno[0]["Pno"])
+
+    if qexec(query):
+        return -1
+    
 def updateAppointment():
     tmp = sp.call('clear', shell=True)
     adate = input("Enter date of the appointment: ")
     atime = input("Enter time of the appointment: ")
+    apid = int(input("Enter patient id: "))
 
-    query = "SELECT Date, Time FROM Appointment WHERE Date = '%s' AND Time = '%s'" % (adate, atime)
+    query = "SELECT * FROM Schedules WHERE Date = '%s' AND Time = '%s' AND Patient_Id = %d" % (adate, atime, apid)
 
     if qexec(query):
         return -1
@@ -424,7 +446,7 @@ def updateAppointment():
     ids = cur.fetchall()
 
     if ids == ():
-        print("No appointment found on this date and time")
+        print("No appointment found on this date, time and patient id")
         return -1
 
     for row in ids:
@@ -433,9 +455,24 @@ def updateAppointment():
     newdate = input("Enter the new date of the appointment: ")
     newtime = input("Enter the new time of the appointment: ")
 
-    query = "UPDATE Appointment SET Time = '%s', Date = '%s' WHERE Date = '%s' AND Time = '%s'" % (newtime, newdate, adate, atime)
+    if(newdate == adate and newtime == atime):
+        print("No change in appointment as same details entered.")
+        return -1
+
+    query = """INSERT INTO Appointment(Time, Date) VALUES ("%s", "%s")""" % (newtime, newdate)
 
     if qexec(query):
+        return -1
+
+    query = "SELECT LAST_INSERT_ID()"
+
+    if qexec(query):
+        return -1
+
+    nid = cur.fetchone()
+    newid = nid["LAST_INSERT_ID()"]
+
+    if(updateSchedules(adate, atime, apid, newdate, newtime, newid)):
         return -1
 
     print("The appointment was updated successfully!")

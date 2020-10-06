@@ -353,23 +353,23 @@ while(1):
 
     tmp = sp.call('clear', shell=True)
 
-    username = input("Username: ")
-    password = getpass()
+    # username = input("Username: ")
+    # password = getpass()
 
-    host = input("*Host: ")
-    if(host == ""):
-        host = "localhost"
+    # host = input("*Host: ")
+    # if(host == ""):
+        # host = "localhost"
 
-    iport = input("*Port: ")
-    if(iport == ""):
-        port = 3306
-    else:
-        port = int(iport)
+    # iport = input("*Port: ")
+    # if(iport == ""):
+        # port = 3306
+    # else:
+        # port = int(iport)
 
-    # username = "root"
-    # password = "blahblah"
-    # host = "localhost"
-    # port = 5005
+    username = "srd"
+    password = "rris0711"
+    host = "localhost"
+    port = 3306
 
     try:
         con = pymysql.connect(host=host,

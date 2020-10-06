@@ -18,21 +18,29 @@ def addroom():
         room["Available"] = 1
 
         roompr["Room_Type"] = room["Room_Type"]
-        tariff = (input("Hourly Tariff: "))
 
-        if(tariff != ""):
-            roompr["Hourly_Tariff"] = int(tariff)
-        else:
-            roompr["Hourly_Tariff"] = "NULL"
-
-        query = """insert into Room_Pricing values("%s", %s)""" % (roompr["Room_Type"], roompr["Hourly_Tariff"])
+        query = """select * from Room_Pricing where Room_Type = '%s'""" % (room["Room_Type"])
         if(qexec(query)):
             return -1
+        rpri = cur.fetchall()
+
+        if(rpri == ()):
+            tariff = (input("Hourly Tariff: "))
+
+            if(tariff != ""):
+                roompr["Hourly_Tariff"] = int(tariff)
+            else:
+                roompr["Hourly_Tariff"] = "NULL"
+
+            query = """insert into Room_Pricing values("%s", %s)""" % (roompr["Room_Type"], roompr["Hourly_Tariff"])
+            if(qexec(query)):
+                return -1
 
         query = """insert into Room values(%d, %d, "%s", "%s", %d)""" % (room["Room_No"], room["Location_Floor"], room["Location_Block"], room["Room_Type"], room["Available"])
         if(qexec(query)):
             return -1
 
+        print("Success!")
         return 0
 
     except Exception as e:
