@@ -130,7 +130,7 @@ def info(opti):
 
             res = cur.fetchall()
             for row in res:
-            	print("Med_Name:",row['Med_Name'],"Expiry_Date:",row['Expiry_Date'],"Batch_No:",row['Batch_Details.Batch_No']," Qty:", row['Qty'])
+            	print("Med_Name:",row['Med_Name'],"Expiry_Date:",row['Expiry_Date'],"Batch_No:",row['Batch_No']," Qty:", row['Qty'])
 
         elif(opti == 12):
             supname = input("Supplier Name: ")
@@ -141,7 +141,7 @@ def info(opti):
 
             res = cur.fetchall()
             for row in res:
-            	print("Med_Name:",row['Med_Name']," Expiry_Date:",row['Expiry_Date'],"Batch_No:",row['Batch_No']," Supplier_Id:", row['Supplier_Details.Supplier_Id']," Supplier_Name:", row['Supplier_Name'])
+            	print("Med_Name:",row['Med_Name']," Expiry_Date:",row['Expiry_Date'],"Batch_No:",row['Batch_No']," Supplier_Id:", row['Supplier_Id']," Supplier_Name:", row['Supplier_Name'])
 
         elif(opti == 13):
             query = "SELECT * FROM Patient"
@@ -150,7 +150,7 @@ def info(opti):
 
             res = cur.fetchall()
             for row in res:
-                print("Patient_Id:",row['Patient_Id']," First_Name:", row['First_Name']," Last_Name:", row['Last_Name']," H_No:", row['H_No']," Street:", row['Street']," City:", row['City']," Zipcode:", row['Zipcode']," Contact_No:", row['Contact_No']," Date_Of_Birth:", row['Date_Of_Birth'])
+                print("Patient_Id:",row['Patient_Id']," First_Name:", row['First_Name']," Last_Name:", row['Last_Name']," H_No:", row['H_No']," Street:", row['Street']," City:", row['City']," Zipcode:", row['Zipcode']," Contact_No:", row['Contact_No']," Date_Of_Birth:", row['Date_Of_Birth'], "\n")
 
         elif(opti == 14):
             query = "SELECT * FROM Staff " 
@@ -159,7 +159,7 @@ def info(opti):
 
             res = cur.fetchall()
             for row in res:
-                print("Staff_Id:",row['Staff_Id']," First_Name:", row['First_Name']," Last_Name:", row['Last_Name']," Sex:", row['Sex']," Salary:", row['Salary']," Contact_No:", row['Contact_No']," Date_Of_Birth:", row['Date_Of_Birth']," H_No:", row['H_No']," Street:", row['Street']," Zipcode:", row['Zipcode']," City:", row['City']," Job:", row['Job']," Supervisor_Id:", row['Supervisor_Id'])
+                print("Staff_Id:",row['Staff_Id']," First_Name:", row['First_Name']," Last_Name:", row['Last_Name']," Sex:", row['Sex']," Salary:", row['Salary']," Contact_No:", row['Contact_No']," Date_Of_Birth:", row['Date_Of_Birth']," H_No:", row['H_No']," Street:", row['Street']," Zipcode:", row['Zipcode']," City:", row['City']," Job:", row['Job']," Supervisor_Id:", row['Supervisor_Id'], "\n")
 
         else:
             print("Error: Invalid Option")

@@ -148,13 +148,9 @@ def addTestorSurgery(edate, etime):
     for test in ids:
         testprice = test["Cost"]
 
-    query = "SELECT * FROM Test_Pricing WHERE Type = '%s'" % (row["Type"])
-    if qexec(query):
-        return -1
+    query = "UPDATE Bill SET Amount = Amount + %d WHERE Bill_No = %d" % (testprice, billno)
 
-    tp = cur.fetchall()
-    if(tp == ()):
-        print("Error. No such test type.")
+    if qexec(query):
         return -1
 
     query = "INSERT INTO Test_or_Surgery VALUES ('%s', '%s', '%s', '%s', '%s')" % (row["Date"], row["Time"], row["Duration"], row["Type"], row["Result"])
@@ -263,7 +259,7 @@ def recommends(pno):
             row["Dosage"] = "NULL"
 
     global billno 
-    billno = createBill()
+    billno = createBill(pno)
     row["Bill_No"] = billno
 
     if medornot == "Y":
@@ -308,6 +304,15 @@ def addPrescription():
         return -1    
 
     if entails(pno):
+        return -1
+
+    row["Payment_Status"] = "K"
+    while row["Payment_Status"] != "Y" and row["Payment_Status"] != "N":
+        row["Payment_Status"] = input("Payment Status (Y/N): ")
+
+    query = "UPDATE Bill SET Payment_Status = '%s' WHERE Bill_No = %d" % (row["Payment_Status"], billno)
+
+    if qexec(query):
         return -1
 
     print("The prescription was created successfully! Associated Bill Number = ", billno)
@@ -358,7 +363,7 @@ def entails(pno):
 
     return 0
 
-def createBill():
+def createBill(pno):
     row = {}
 
     flag = 1
@@ -380,8 +385,6 @@ def createBill():
     row["Time"] = datetime.now().strftime("%H:%M:%S")
     
     row["Payment_Status"] = "K"
-    while row["Payment_Status"] != "Y" and row["Payment_Status"] != "N":
-        row["Payment_Status"] = input("Payment Status (Y/N): ")
     
     row["Amount"] = (medprice*dosage) + testprice
 
@@ -390,7 +393,26 @@ def createBill():
     if qexec(query):
         return -1
     
+    if(createPays(pno, row["Bill_No"])):
+        return -1
+
     return row["Bill_No"]
+
+def createPays(pno, bno):
+
+    query = "SELECT * FROM Schedules WHERE Pno = %d" % (pno)
+
+    if(qexec(query)):
+        return -1
+
+    dets = cur.fetchall()
+
+    query = "INSERT INTO Pays VALUES (%d, %d, %d)" % (bno, dets[0]["Patient_Id"], dets[0]["Staff_Id"])
+
+    if(qexec(query)):
+        return -1
+
+    return 0
 
 def updateTestPricing():
     tmp = sp.call('clear', shell=True)
