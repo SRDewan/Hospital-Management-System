@@ -43,6 +43,14 @@ def addMedDetails(med_name):
     row["Manufacturer"] = input("Manufacturer: ")
     row["Price"] = int(input("Price: "))
 
+    query = "select * from Med_Details where Med_Name = '%s' AND Manufacturer = '%s' AND Price = %d" % (row["Med_Name"], row["Manufacturer"], row["Price"])
+    if(qexec(query)):
+        return -1;
+    ret = cur.fetchall()
+
+    if(ret != ()):
+        return 0
+
     query = "INSERT INTO Med_Details VALUES ('%s', '%s', '%d')" % (row["Med_Name"], row["Manufacturer"], row["Price"])
 
     if qexec(query):
@@ -59,12 +67,23 @@ def addMedication():
     row["Med_Name"] = input("Medicine name: ")
     row["Batch_No"] = int(input("Batch No: "))
     row["Expiry_Date"] = input("Expiry Date (YYYY-MM-DD): ")
-    row["Supplier_Id"] = int(input("Supplier Id: "))
+    snew = "N"
+    ret = ()
+
+    while(ret == () and snew != "Y"):
+        row["Supplier_Id"] = int(input("Supplier Id: "))
+        query = "select Supplier_Id from Supplier_Details where Supplier_Id = %d" % (row["Supplier_Id"])
+        if(qexec(query)):
+            return -1;
+        ret = cur.fetchall()
+
+        if(ret == ()):
+            snew = input("Supplier does not exist. Would you like to create a new supplier (Y/N): ")
+            if(snew == "Y"):
+                if addSupplierDetails(row["Supplier_Id"]):
+                    return -1
 
     query = "INSERT INTO Medication VALUES ('%s', '%d', '%s', '%d')" % (row["Med_Name"], row["Batch_No"], row["Expiry_Date"], row["Supplier_Id"])
-
-    if addSupplierDetails(row["Supplier_Id"]):
-        return -1
 
     if qexec(query):
         return -1
@@ -128,6 +147,15 @@ def addTestorSurgery(edate, etime):
     global testprice
     for test in ids:
         testprice = test["Cost"]
+
+    query = "SELECT * FROM Test_Pricing WHERE Type = '%s'" % (row["Type"])
+    if qexec(query):
+        return -1
+
+    tp = cur.fetchall()
+    if(tp == ()):
+        print("Error. No such test type.")
+        return -1
 
     query = "INSERT INTO Test_or_Surgery VALUES ('%s', '%s', '%s', '%s', '%s')" % (row["Date"], row["Time"], row["Duration"], row["Type"], row["Result"])
 

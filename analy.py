@@ -30,13 +30,13 @@ def analy(optio):
             	print("Total Income of Hospital:",row['sum(Amount)'])
 
         elif(optio == 3):
-            query = "select max(Salary), min(Salary) from Staff "
+            query = "select avg(Salary), max(Salary), min(Salary) from Staff "
             if(qexec(query)):
                 return -1
 
             res = cur.fetchall()
             for row in res:
-                print("Maximum:", row['max(Salary)']," Minimum:",row['min(Salary)'])
+                print("Average:", row['avg(Salary)'], "Maximum:", row['max(Salary)']," Minimum:",row['min(Salary)'])
                 
 
         elif(optio == 4):

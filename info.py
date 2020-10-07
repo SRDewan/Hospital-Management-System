@@ -153,7 +153,6 @@ def info(opti):
                 print("Patient_Id:",row['Patient_Id']," First_Name:", row['First_Name']," Last_Name:", row['Last_Name']," H_No:", row['H_No']," Street:", row['Street']," City:", row['City']," Zipcode:", row['Zipcode']," Contact_No:", row['Contact_No']," Date_Of_Birth:", row['Date_Of_Birth'])
 
         elif(opti == 14):
-            name = input("First_Name: ")
             query = "SELECT * FROM Staff " 
             if(qexec(query)):
                 return -1
