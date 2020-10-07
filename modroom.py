@@ -39,7 +39,7 @@ def bookroom():
         if(qexec(query)): 
             return -1; 
         pri = cur.fetchall()
-        query = """update Bill set Amount = %d, Payment_Status = "N" where Bill_No = %d""" % (pri[0]["Hourly_Tariff"] * dur, bno)
+        query = """update Bill set Amount = Amount + %d, Payment_Status = "N" where Bill_No = %d""" % (pri[0]["Hourly_Tariff"] * dur, bno)
         if(qexec(query)): 
             return -1; 
 
@@ -47,11 +47,31 @@ def bookroom():
         if(qexec(query)):
             return -1
 
+        query = "update Room set Available = 0 where Room_No = %d" % (rno)
+        if(qexec(query)):
+            return -1
+
+        print("Success!")
+        return 0
+
+    except Exception as e:
+        print("Error: ", e)
+        return -1
+
+def freeroom():
+
+    try:
+
+        rno = int(input("Enter room number: "))
         query = "update Room set Available = 1 where Room_No = %d" % (rno)
         if(qexec(query)):
             return -1
 
-        print("Success! New bill amount = ", pri[0]["Hourly_Tariff"] * dur)
+        query = "delete from Stays_In where Room_No = %d" % (rno)
+        if(qexec(query)):
+            return -1
+
+        print("Success!")
         return 0
 
     except Exception as e:

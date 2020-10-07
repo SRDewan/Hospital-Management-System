@@ -127,6 +127,14 @@ def modify(opt):
             con.commit()
             return 0
 
+    elif(opt == 11):
+        if(freeroom()):
+            con.rollback
+            return -1
+        else:
+            con.commit()
+            return 0
+
     else:
         print("Error: Invalid Option")
 
@@ -244,6 +252,7 @@ def dispatch(ch):
             print("8. Edit Department Head")
             print("9. Edit Bill Payment Status")
             print("10. Update Test/Surgery Result")
+            print("11. Update Test/Surgery Result")
             print("")
             print("Press ENTER to go back")
             opt = int(input("Enter choice: "))
@@ -415,7 +424,7 @@ while(1):
             modpat.cur = cur    
             from modpat import modpat
             modroom.cur = cur    
-            from modroom import bookroom, modroom
+            from modroom import bookroom, freeroom, modroom
             modhead.cur = cur    
             from modhead import modhead
             modtest.cur = cur    

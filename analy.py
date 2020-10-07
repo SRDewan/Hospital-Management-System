@@ -86,7 +86,7 @@ def analy(optio):
 
             res = cur.fetchall()
             for row in res:
-                print("Bill No:", row['Bill.Bill_No']," Amount:",row['Amount'])
+                print("Bill No:", row['Bill_No']," Amount:",row['Amount'])
 
         elif(optio == 9):
             date = input("Input Date (YYYY-MM-DD): ")
