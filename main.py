@@ -88,7 +88,7 @@ def modify(opt):
             return 0
 
     elif(opt == 6):
-        if(bookroom()):
+        if(modtest()):
             con.rollback
             return -1
         else:
@@ -120,7 +120,7 @@ def modify(opt):
             return 0
 
     elif(opt == 10):
-        if(modtest()):
+        if(bookroom()):
             con.rollback
             return -1
         else:
@@ -247,12 +247,12 @@ def dispatch(ch):
             print("3. Edit Appointment Details")
             print("4. Edit Test/Surgery Pricing")
             print("5. Edit Medication Pricing")
-            print("6. Book a Room")
+            print("6. Edit Test/Surgery Result")
             print("7. Edit Room Tariff")
             print("8. Edit Department Head")
             print("9. Edit Bill Payment Status")
-            print("10. Update Test/Surgery Result")
-            print("11. Update Test/Surgery Result")
+            print("10. Book a Room")
+            print("11. Free a Room")
             print("")
             print("Press ENTER to go back")
             opt = int(input("Enter choice: "))
@@ -305,17 +305,17 @@ def dispatch(ch):
 
     elif(ch == 5):
         try:
-            print("1. Show the average, max, min bill amount in certain period of time")
+            print("1. Show the average, maximum and minimum bill amount in certain period of time")
             print("2. Show the total income of Hospital in certain period of time")
-            print("3. Show the average, max, min salary of staff members")
+            print("3. Show the average, maximum and minimum salary of staff members")
             print("4. Show the total bill of a particular patient")
-            print("5. Show the average, max, min hourly tariff of rooms")
+            print("5. Show the average, maximum and minimum hourly tariff of rooms")
             print("6. Show the schedules of a particular patient")
             print("7. Show the schedules of a particular staff")
             print("8. Show the pending bills of a particular patient")
-            print("9. Show the Details of treatment recommended by doctor during a particular appointment of a particular patient")
-            print("10. Show the medication listed in desceding order of most recommeded")
-            print("11. Show the doctors listed in desceding order of most treated patients")
+            print("9. Show the details of treatment recommended by doctor during a particular appointment of a particular patient")
+            print("10. Show the medication listed in descending order of most recommeded")
+            print("11. Show the doctors listed in descending order of most treated patients")
             print("")
             print("Press ENTER to go back")
             optio = int(input("Enter choice: "))
@@ -374,11 +374,6 @@ while(1):
         port = 3306
     else:
         port = int(iport)
-
-    # username = "srd"
-    # password = "rris0711"
-    # host = "localhost"
-    # port = 3306
 
     try:
         con = pymysql.connect(host=host,

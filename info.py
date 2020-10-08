@@ -1,9 +1,11 @@
 import subprocess as sp
 import random
 from datetime import datetime
-
+from prettytable import PrettyTable
 from exec import qexec
-shifts = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
+shifts = ["Monday", "Tuesday", "Wednesday",
+          "Thursday", "Friday", "Saturday", "Sunday"]
 
 def info(opti):
 
@@ -13,15 +15,20 @@ def info(opti):
             if(qexec(query)):
                 return -1
 
+            field_names = [i[0] for i in cur.description]
+            x = PrettyTable(field_names)
+
             res = cur.fetchall()
             for row in res:
-            	print("Room_No:",row['Room_No']," Location_Block:",row['Location_Block']," Location_Floor:", row['Location_Floor']," Room_Type:", row['Room_Type'])
+                x.add_row([row['Room_No'], row['Location_Block'],
+                           row['Location_Floor'], row['Room_Type'], row['Available']])
+            print(x)
 
         elif(opti == 2):
-            
+
             shift = "Holiday"
             while shift not in shifts:
-                shift= (input("Shift Day: "))
+                shift = (input("Shift Day: "))
 
             query = """SELECT First_Name, Last_Name FROM Staff INNER JOIN Shift on Staff.Staff_Id= Shift.Staff_Id WHERE Shift_Day = "%s" """ % (
                 shift)
@@ -29,8 +36,13 @@ def info(opti):
                 return -1
 
             res = cur.fetchall()
+
+            field_names = [i[0] for i in cur.description]
+            x = PrettyTable(field_names)
+
             for row in res:
-            	print("First_Name:",row['First_Name']," Last_Name:", row['Last_Name'])
+                x.add_row([row['First_Name'], row['Last_Name']])
+            print(x)
 
         elif(opti == 3):
             spec = input("Specialisation: ")
@@ -40,36 +52,58 @@ def info(opti):
                 return -1
 
             res = cur.fetchall()
+
+            field_names = [i[0] for i in cur.description]
+            x = PrettyTable(field_names)
+
             for row in res:
-            	print("First_Name:",row['First_Name']," Last_Name:", row['Last_Name'])
+                x.add_row([row['First_Name'], row['Last_Name']])
+            print(x)
 
         elif(opti == 4):
-            comp = input("Companyname: ")
-            query = """SELECT Insurance_Id FROM Insured_Details WHERE Company = "%s" """ % (comp)
+            comp = input("Company Name: ")
+            query = """SELECT Insurance_Id FROM Insured_Details WHERE Company = "%s" """ % (
+                comp)
             if(qexec(query)):
                 return -1
+
             res = cur.fetchall()
 
+            field_names = ['First_Name', 'Last_Name']
+            x = PrettyTable(field_names)
+
             for row in res:
-            	num=int(row['Insurance_Id'])
-            	que = """SELECT First_Name, Last_Name FROM Patient INNER JOIN Insured_Patients on Patient.Patient_Id= Insured_Patients.Patient_Id WHERE Insurance_Id = %d """ % (
-                num)
-            	if(qexec(que)):
-            		return -1
-            	qes =cur.fetchall()
-            	for rum in qes:
-            		print("First_Name:",rum['First_Name']," Last_Name:",rum['Last_Name'])
+                num = int(row['Insurance_Id'])
+                que = """SELECT First_Name, Last_Name FROM Patient INNER JOIN Insured_Patients on Patient.Patient_Id= Insured_Patients.Patient_Id WHERE Insurance_Id = %d """ % (
+                    num)
+
+                if qexec(que):
+                    return -1
+
+                qes = cur.fetchall()
+
+                for rum in qes:
+                    x.add_row([rum['First_Name'], rum['Last_Name']])
+
+            print(x)
 
         elif(opti == 5):
             patno = int(input("Patient_Id: "))
             query = "SELECT Patient_Id, First_Name, Last_Name, Contact_No FROM Patient WHERE Patient_Id = %d " % (
                 patno)
+
             if(qexec(query)):
                 return -1
 
             res = cur.fetchall()
+
+            field_names = [i[0] for i in cur.description]
+            x = PrettyTable(field_names)
+
             for row in res:
-            	print("Patient_Id:",row['Patient_Id']," First_Name:",row['First_Name']," Last_Name:", row['Last_Name']," Contact_No:", row['Contact_No'])
+                x.add_row([row['Patient_Id'], row['First_Name'],
+                           row['Last_Name'], row['Contact_No']])
+            print(x)
 
         elif(opti == 6):
             pno = int(input("Pno: "))
@@ -78,18 +112,29 @@ def info(opti):
                 return -1
 
             res = cur.fetchall()
+
+            field_names = [i[0] for i in cur.description]
+            x = PrettyTable(field_names)
+
             for row in res:
-            	print("Pno:",row['Pno']," Complaint:", row['Complaint']," Diagnosis:",row['Diagnosis'])
+                x.add_row([row['Pno'], row['Complaint'], row['Diagnosis']])
+            print(x)
 
         elif(opti == 7):
             billno = int(input("Bill_No: "))
-            query = "SELECT Bill_No, Amount FROM Bill WHERE Bill_No = %d " % (billno)
+            query = "SELECT Bill_No, Amount FROM Bill WHERE Bill_No = %d " % (
+                billno)
             if(qexec(query)):
                 return -1
 
             res = cur.fetchall()
+
+            field_names = [i[0] for i in cur.description]
+            x = PrettyTable(field_names)
+
             for row in res:
-            	print("Bill_No:",row['Bill_No']," Amount:", row['Amount'])
+                x.add_row([row['Bill_No'], row['Amount']])
+            print(x)
 
         elif(opti == 8):
             dno = int(input("Dno: "))
@@ -98,18 +143,31 @@ def info(opti):
                 return -1
 
             res = cur.fetchall()
+
+            field_names = [i[0] for i in cur.description]
+            x = PrettyTable(field_names)
+
             for row in res:
-            	print("DNo:",row['Dno']," Dname:", row['Dname']," Location_Block:",row['Location_Block']," Location_Floor:", row['Location_Floor'])
+                x.add_row([row['Dno'], row['Dname'],
+                           row['Location_Block'], row['Location_Floor']])
+            print(x)
 
         elif(opti == 9):
             name = input("First_Name: ")
-            query = """SELECT * FROM Patient WHERE First_Name = "%s" """ % (name)
+            query = """SELECT * FROM Patient WHERE First_Name = "%s" """ % (
+                name)
             if(qexec(query)):
                 return -1
 
             res = cur.fetchall()
+
+            field_names = [i[0] for i in cur.description]
+            x = PrettyTable(field_names)
+
             for row in res:
-            	print("Patient_Id:",row['Patient_Id']," First_Name:", row['First_Name']," Last_Name:", row['Last_Name']," H_No:", row['H_No']," Street:", row['Street']," City:", row['City']," Zipcode:", row['Zipcode']," Contact_No:", row['Contact_No']," Date_Of_Birth:", row['Date_Of_Birth'])
+                x.add_row([row['Patient_Id'], row['First_Name'], row['Last_Name'], row['H_No'],
+                           row['Street'], row['City'], row['Zipcode'], row['Contact_No'], row['Date_Of_Birth']])
+            print(x)
 
         elif(opti == 10):
             name = input("First_Name: ")
@@ -118,8 +176,14 @@ def info(opti):
                 return -1
 
             res = cur.fetchall()
+
+            field_names = [i[0] for i in cur.description]
+            x = PrettyTable(field_names)
+
             for row in res:
-            	print("Staff_Id:",row['Staff_Id']," First_Name:", row['First_Name']," Last_Name:", row['Last_Name']," Sex:", row['Sex']," Salary:", row['Salary']," Contact_No:", row['Contact_No']," Date_Of_Birth:", row['Date_Of_Birth']," H_No:", row['H_No']," Street:", row['Street']," Zipcode:", row['Zipcode']," City:", row['City']," Job:", row['Job']," Supervisor_Id:", row['Supervisor_Id'])
+                x.add_row([row['Staff_Id'], row['First_Name'], row['Last_Name'], row['Sex'], row['Salary'], row['Contact_No'],
+                           row['Date_Of_Birth'], row['H_No'], row['Street'], row['Zipcode'], row['City'], row['Job'], row['Supervisor_Id']])
+            print(x)
 
         elif(opti == 11):
             medname = input("Medicine Name: ")
@@ -129,8 +193,14 @@ def info(opti):
                 return -1
 
             res = cur.fetchall()
+
+            field_names = [i[0] for i in cur.description]
+            x = PrettyTable(field_names)
+
             for row in res:
-            	print("Med_Name:",row['Med_Name'],"Expiry_Date:",row['Expiry_Date'],"Batch_No:",row['Batch_No']," Qty:", row['Qty'])
+                x.add_row([row['Med_Name'], row['Expiry_Date'],
+                           row['Batch_No'], row['Qty']])
+            print(x)
 
         elif(opti == 12):
             supname = input("Supplier Name: ")
@@ -140,8 +210,14 @@ def info(opti):
                 return -1
 
             res = cur.fetchall()
+
+            field_names = [i[0] for i in cur.description]
+            x = PrettyTable(field_names)
+
             for row in res:
-            	print("Med_Name:",row['Med_Name']," Expiry_Date:",row['Expiry_Date'],"Batch_No:",row['Batch_No']," Supplier_Id:", row['Supplier_Id']," Supplier_Name:", row['Supplier_Name'])
+                x.add_row([row['Med_Name'], row['Expiry_Date'],
+                           row['Batch_No'], row['Supplier_Id'], row['Supplier_Name']])
+            print(x)
 
         elif(opti == 13):
             query = "SELECT * FROM Patient"
@@ -149,21 +225,33 @@ def info(opti):
                 return -1
 
             res = cur.fetchall()
+
+            field_names = [i[0] for i in cur.description]
+            x = PrettyTable(field_names)
+
             for row in res:
-                print("Patient_Id:",row['Patient_Id']," First_Name:", row['First_Name']," Last_Name:", row['Last_Name']," H_No:", row['H_No']," Street:", row['Street']," City:", row['City']," Zipcode:", row['Zipcode']," Contact_No:", row['Contact_No']," Date_Of_Birth:", row['Date_Of_Birth'], "\n")
+                x.add_row([row['Patient_Id'], row['First_Name'], row['Last_Name'], row['H_No'],
+                           row['Street'], row['City'], row['Zipcode'], row['Contact_No'], row['Date_Of_Birth']])
+            print(x)
 
         elif(opti == 14):
-            query = "SELECT * FROM Staff " 
+            query = "SELECT * FROM Staff"
             if(qexec(query)):
                 return -1
 
             res = cur.fetchall()
+
+            field_names = [i[0] for i in cur.description]
+            x = PrettyTable(field_names)
+
             for row in res:
-                print("Staff_Id:",row['Staff_Id']," First_Name:", row['First_Name']," Last_Name:", row['Last_Name']," Sex:", row['Sex']," Salary:", row['Salary']," Contact_No:", row['Contact_No']," Date_Of_Birth:", row['Date_Of_Birth']," H_No:", row['H_No']," Street:", row['Street']," Zipcode:", row['Zipcode']," City:", row['City']," Job:", row['Job']," Supervisor_Id:", row['Supervisor_Id'], "\n")
+                x.add_row([row['Staff_Id'], row['First_Name'], row['Last_Name'], row['Sex'], row['Salary'], row['Contact_No'],
+                           row['Date_Of_Birth'], row['H_No'], row['Street'], row['Zipcode'], row['City'], row['Job'], row['Supervisor_Id']])
+            print(x)
 
         else:
             print("Error: Invalid Option")
-        
+
         return 0
 
     except Exception as e:

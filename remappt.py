@@ -9,8 +9,8 @@ def delappt():
     try:
         tmp = sp.call('clear', shell = True)
         pid = int(input("Enter Patient Id whose appointment is to be removed: "))
-        at = (input("Enter Appointment Time (HH:MM:SS): "))
         ad = (input("Enter Appointment Date (YYYY-MM-DD): "))
+        at = (input("Enter Appointment Time (HH:MM:SS): "))
         
         query = """select * from Schedules where Patient_Id = %d and Time = "%s" and Date = "%s" """ % (pid, at, ad)
         if(qexec(query)): 
