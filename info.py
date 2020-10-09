@@ -30,7 +30,7 @@ def info(opti):
             while shift not in shifts:
                 shift = (input("Shift Day: "))
 
-            query = """SELECT First_Name, Last_Name FROM Staff INNER JOIN Shift on Staff.Staff_Id= Shift.Staff_Id WHERE Shift_Day = "%s" """ % (
+            query = """SELECT First_Name, Last_Name FROM Staff INNER JOIN Shift ON Staff.Staff_Id= Shift.Staff_Id WHERE Shift_Day = "%s" """ % (
                 shift)
             if(qexec(query)):
                 return -1
@@ -46,7 +46,7 @@ def info(opti):
 
         elif(opti == 3):
             spec = input("Specialisation: ")
-            query = """SELECT First_Name, Last_Name FROM Staff INNER JOIN Specialisation on Staff.Staff_Id= Specialisation.Staff_Id WHERE Expertise_Area = "%s" """ % (
+            query = """SELECT First_Name, Last_Name FROM Staff INNER JOIN Specialisation ON Staff.Staff_Id= Specialisation.Staff_Id WHERE Expertise_Area = "%s" """ % (
                 spec)
             if(qexec(query)):
                 return -1
@@ -74,7 +74,7 @@ def info(opti):
 
             for row in res:
                 num = int(row['Insurance_Id'])
-                que = """SELECT First_Name, Last_Name FROM Patient INNER JOIN Insured_Patients on Patient.Patient_Id= Insured_Patients.Patient_Id WHERE Insurance_Id = %d """ % (
+                que = """SELECT First_Name, Last_Name FROM Patient INNER JOIN Insured_Patients ON Patient.Patient_Id= Insured_Patients.Patient_Id WHERE Insurance_Id = %d """ % (
                     num)
 
                 if qexec(que):
@@ -187,7 +187,7 @@ def info(opti):
 
         elif(opti == 11):
             medname = input("Medicine Name: ")
-            query = """SELECT Med_Name, Expiry_Date, Batch_Details.Batch_No, Qty FROM Batch_Details INNER JOIN Medication on Batch_Details.Batch_No= Medication.Batch_No WHERE Med_Name = "%s" """ % (
+            query = """SELECT Med_Name, Expiry_Date, Batch_Details.Batch_No, Qty FROM Batch_Details INNER JOIN Medication ON Batch_Details.Batch_No= Medication.Batch_No WHERE Med_Name = "%s" """ % (
                 medname)
             if(qexec(query)):
                 return -1
@@ -204,7 +204,7 @@ def info(opti):
 
         elif(opti == 12):
             supname = input("Supplier Name: ")
-            query = """SELECT Med_Name, Expiry_Date, Batch_No, Supplier_Details.Supplier_Id, Supplier_Name FROM Supplier_Details INNER JOIN Medication on Supplier_Details.Supplier_Id= Medication.Supplier_Id WHERE Supplier_Name = "%s" """ % (
+            query = """SELECT Med_Name, Expiry_Date, Batch_No, Supplier_Details.Supplier_Id, Supplier_Name FROM Supplier_Details INNER JOIN Medication ON Supplier_Details.Supplier_Id= Medication.Supplier_Id WHERE Supplier_Name = "%s" """ % (
                 supname)
             if(qexec(query)):
                 return -1

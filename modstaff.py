@@ -6,7 +6,7 @@ inf = 1000000
 
 def fee(res):
 
-    query = "select * from Doctor where Staff_Id = %d" % (res["Staff_Id"])
+    query = "SELECT * FROM Doctor WHERE Staff_Id = %d" % (res["Staff_Id"])
     if(qexec(query)):
         return -1
     doc = cur.fetchall()
@@ -14,7 +14,7 @@ def fee(res):
     print("Current consultation fee = ", doc[0]["Consultation_Fee"])    
     num = int(input("Enter new fee: "))
 
-    query = "update Doctor set Consultation_Fee = %d where Staff_Id = %d" % (num, res["Staff_Id"])
+    query = "UPDATE Doctor set Consultation_Fee = %d WHERE Staff_Id = %d" % (num, res["Staff_Id"])
     if(qexec(query)):
         return -1
 
@@ -31,7 +31,7 @@ def supid(res):
     else:
         num = int(inp)
 
-    query = "update Staff set Supervisor_Id = %s where Staff_Id = %d" % (num, res["Staff_Id"])
+    query = "UPDATE Staff set Supervisor_Id = %s WHERE Staff_Id = %d" % (num, res["Staff_Id"])
     if(qexec(query)):
         return -1
 
@@ -44,7 +44,7 @@ def sal(res):
     print("Current salary = ", res["Salary"])    
     num = int(input("Enter new salary: "))
 
-    query = "update Staff set Salary = %d where Staff_Id = %d" % (num, res["Staff_Id"])
+    query = "UPDATE Staff set Salary = %d WHERE Staff_Id = %d" % (num, res["Staff_Id"])
     if(qexec(query)):
         return -1
 
@@ -66,7 +66,7 @@ def addr(res):
     zipc = int(input("Zipcode: "))
     city = input("City: ")
 
-    query = """update Staff set H_No = %d, Street = "%s", Zipcode = %d, City = "%s"  where Staff_Id = %d""" % (hno, street, zipc, city, res["Staff_Id"])
+    query = """UPDATE Staff set H_No = %d, Street = "%s", Zipcode = %d, City = "%s"  WHERE Staff_Id = %d""" % (hno, street, zipc, city, res["Staff_Id"])
     if(qexec(query)):
         return -1
 
@@ -79,7 +79,7 @@ def contact(res):
     print("Current contact number = ", res["Contact_No"])    
     num = int(input("Enter new number: "))
 
-    query = "update Staff set Contact_No = %d where Staff_Id = %d" % (num, res["Staff_Id"])
+    query = "UPDATE Staff set Contact_No = %d WHERE Staff_Id = %d" % (num, res["Staff_Id"])
     if(qexec(query)):
         return -1
 
@@ -93,7 +93,7 @@ def modstaff():
         
         sid = int(input("Enter staff id whose details are to be edited: "))
 
-        query = """select * from Staff where Staff_Id = %d""" % (sid)
+        query = """SELECT * FROM Staff WHERE Staff_Id = %d""" % (sid)
         if(qexec(query)): 
             return -1; 
         res = cur.fetchall()

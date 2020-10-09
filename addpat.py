@@ -34,7 +34,7 @@ def addpat():
         patient = {}
 
         flag = 1
-        query = "select Patient_Id from Patient"
+        query = "SELECT Patient_Id from Patient"
         if(qexec(query)):
             return -1;
         ids = cur.fetchall()

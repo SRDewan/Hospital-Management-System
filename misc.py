@@ -43,7 +43,7 @@ def addMedDetails(med_name):
     row["Manufacturer"] = input("Manufacturer: ")
     row["Price"] = int(input("Price: "))
 
-    query = "select * from Med_Details where Med_Name = '%s' AND Manufacturer = '%s' AND Price = %d" % (row["Med_Name"], row["Manufacturer"], row["Price"])
+    query = "SELECT * FROM Med_Details WHERE Med_Name = '%s' AND Manufacturer = '%s' AND Price = %d" % (row["Med_Name"], row["Manufacturer"], row["Price"])
     if(qexec(query)):
         return -1;
     ret = cur.fetchall()
@@ -72,7 +72,7 @@ def addMedication():
 
     while(ret == () and snew != "Y"):
         row["Supplier_Id"] = int(input("Supplier Id: "))
-        query = "select Supplier_Id from Supplier_Details where Supplier_Id = %d" % (row["Supplier_Id"])
+        query = "SELECT Supplier_Id FROM Supplier_Details WHERE Supplier_Id = %d" % (row["Supplier_Id"])
         if(qexec(query)):
             return -1;
         ret = cur.fetchall()
@@ -281,7 +281,7 @@ def addPrescription():
 
     while(ids == {}):
         pno = int(input("Pno: "))
-        query = "SELECT Pno from Schedules WHERE Pno = %d" % (pno)
+        query = "SELECT Pno FROM Schedules WHERE Pno = %d" % (pno)
         
         if qexec(query):
             return -1

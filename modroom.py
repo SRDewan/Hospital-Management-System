@@ -9,7 +9,7 @@ def bookroom():
     try:
 
         rno = int(input("Enter room number: "))
-        query = """select * from Room where Room_No = %d""" % (rno)
+        query = """SELECT * FROM Room WHERE Room_No = %d""" % (rno)
         if(qexec(query)): 
             return -1; 
         res = cur.fetchall()
@@ -21,25 +21,25 @@ def bookroom():
             return -1
 
         bno = int(input("Enter bill number to which this room will be charged: "))
-        query = """select * from Entails where Bill_No = %d""" % (bno)
+        query = """SELECT * FROM Entails WHERE Bill_No = %d""" % (bno)
         if(qexec(query)): 
             return -1; 
         ent = cur.fetchall()
         if(ent == ()):
             print("Invalid bill number. No such bill.")
             return -1
-        query = """select * from Schedules where Pno = %d""" % (ent[0]["Pno"])
+        query = """SELECT * FROM Schedules WHERE Pno = %d""" % (ent[0]["Pno"])
         if(qexec(query)): 
             return -1; 
         sched = cur.fetchall()
 
         dur = int(input("Enter stay duration (number of hours rounded up): "))
 
-        query = """select * from Room_Pricing where Room_Type = "%s" """ % (res[0]["Room_Type"])
+        query = """SELECT * FROM Room_Pricing WHERE Room_Type = "%s" """ % (res[0]["Room_Type"])
         if(qexec(query)): 
             return -1; 
         pri = cur.fetchall()
-        query = """update Bill set Amount = Amount + %d, Payment_Status = "N" where Bill_No = %d""" % (pri[0]["Hourly_Tariff"] * dur, bno)
+        query = """UPDATE Bill set Amount = Amount + %d, Payment_Status = "N" WHERE Bill_No = %d""" % (pri[0]["Hourly_Tariff"] * dur, bno)
         if(qexec(query)): 
             return -1; 
 
@@ -47,7 +47,7 @@ def bookroom():
         if(qexec(query)):
             return -1
 
-        query = "update Room set Available = 0 where Room_No = %d" % (rno)
+        query = "UPDATE Room set Available = 0 WHERE Room_No = %d" % (rno)
         if(qexec(query)):
             return -1
 
@@ -63,11 +63,11 @@ def freeroom():
     try:
 
         rno = int(input("Enter room number: "))
-        query = "update Room set Available = 1 where Room_No = %d" % (rno)
+        query = "UPDATE Room set Available = 1 WHERE Room_No = %d" % (rno)
         if(qexec(query)):
             return -1
 
-        query = "delete from Stays_In where Room_No = %d" % (rno)
+        query = "DELETE FROM Stays_In WHERE Room_No = %d" % (rno)
         if(qexec(query)):
             return -1
 
@@ -84,7 +84,7 @@ def modroom():
         
         rtype = (input("Enter room type whose tariff is to be edited: "))
 
-        query = """select * from Room_Pricing where Room_Type = "%s" """ % (rtype)
+        query = """SELECT * FROM Room_Pricing WHERE Room_Type = "%s" """ % (rtype)
         if(qexec(query)): 
             return -1; 
         res = cur.fetchall()
@@ -94,7 +94,7 @@ def modroom():
 
         print("Current room tariff = ", res[0]["Hourly_Tariff"])
         tar = float(input("Enter new tariff: "))
-        query = """update Room_Pricing set Hourly_Tariff = %f where Room_Type = "%s" """ % (tar, rtype)
+        query = """UPDATE Room_Pricing set Hourly_Tariff = %f WHERE Room_Type = "%s" """ % (tar, rtype)
         if(qexec(query)): 
             return -1; 
 
