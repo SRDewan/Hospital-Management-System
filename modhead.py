@@ -10,7 +10,7 @@ def modhead():
         
         dno = int(input("Enter department number whose head is to be changed: "))
 
-        query = """select * from Heads where Dno = %d""" % (dno)
+        query = """SELECT * FROM Heads WHERE Dno = %d""" % (dno)
         if(qexec(query)): 
             return -1; 
         res = cur.fetchall()
@@ -18,7 +18,7 @@ def modhead():
             print("Invalid department number. No such department.")
             return -1
 
-        query = """select * from Staff where Staff_Id = %d""" % (res[0]["Staff_Id"])
+        query = """SELECT * FROM Staff WHERE Staff_Id = %d""" % (res[0]["Staff_Id"])
         if(qexec(query)): 
             return -1; 
         head = cur.fetchall()
@@ -26,7 +26,7 @@ def modhead():
         print("Current head id = ", head[0]["Staff_Id"])
         print("Current head name = ", head[0]["First_Name"], head[0]["Last_Name"])
         hid = int(input("Enter new head's staff id: "))
-        query = """update Heads set Staff_Id = %d where Dno = %d""" % (hid, dno)
+        query = """UPDATE Heads set Staff_Id = %d WHERE Dno = %d""" % (hid, dno)
         if(qexec(query)): 
             return -1; 
 

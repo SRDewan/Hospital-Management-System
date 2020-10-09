@@ -12,7 +12,7 @@ def delappt():
         ad = (input("Enter Appointment Date (YYYY-MM-DD): "))
         at = (input("Enter Appointment Time (HH:MM:SS): "))
         
-        query = """select * from Schedules where Patient_Id = %d and Time = "%s" and Date = "%s" """ % (pid, at, ad)
+        query = """SELECT * FROM Schedules WHERE Patient_Id = %d and Time = "%s" and Date = "%s" """ % (pid, at, ad)
         if(qexec(query)): 
             return -1; 
         res = cur.fetchall()
@@ -20,7 +20,7 @@ def delappt():
             print("Invalid entry. No such appointment.")
             return -1
 
-        query = """select * from Prescription where Pno = %d""" % (res[0]["Pno"])
+        query = """SELECT * FROM Prescription WHERE Pno = %d""" % (res[0]["Pno"])
         if(qexec(query)): 
             return -1; 
         pre = cur.fetchall()
@@ -28,10 +28,10 @@ def delappt():
             print("Error. Cannot cancel a completed appointment.")
             return -1
 
-        query = "delete from Schedules where Pno = %d" % (res[0]["Pno"])
+        query = "DELETE FROM Schedules WHERE Pno = %d" % (res[0]["Pno"])
         if(qexec(query)): 
             return -1; 
-        query = """delete from Appointment where Time = "%s" and Date = "%s" """ % (res[0]["Time"], res[0]["Date"])
+        query = """DELETE FROM Appointment WHERE Time = "%s" and Date = "%s" """ % (res[0]["Time"], res[0]["Date"])
         if(qexec(query)): 
             return -1; 
 

@@ -19,7 +19,7 @@ def addroom():
 
         roompr["Room_Type"] = room["Room_Type"]
 
-        query = """select * from Room_Pricing where Room_Type = '%s'""" % (room["Room_Type"])
+        query = """SELECT * from Room_Pricing WHERE Room_Type = '%s'""" % (room["Room_Type"])
         if(qexec(query)):
             return -1
         rpri = cur.fetchall()

@@ -6,7 +6,7 @@ inf = 1000000
 
 def ins(inspat):
 
-    query = "select * from Insured_Details where Insurance_Id = %d" % (inspat["Insurance_Id"])
+    query = "SELECT * FROM Insured_Details WHERE Insurance_Id = %d" % (inspat["Insurance_Id"])
     if(qexec(query)):
         return -1
     insdet = cur.fetchall()
@@ -14,7 +14,7 @@ def ins(inspat):
     print("Current latest renewal date = ", insdet[0]["Latest_Renewal_Date"])    
     num = (input("Enter new date (YYYY-MM-DD): "))
 
-    query = """update Insured_Details set Latest_Renewal_Date = "%s" where Insurance_Id = %d""" % (num, inspat["Insurance_Id"])
+    query = """UPDATE Insured_Details set Latest_Renewal_Date = "%s" WHERE Insurance_Id = %d""" % (num, inspat["Insurance_Id"])
     if(qexec(query)):
         return -1
 
@@ -36,7 +36,7 @@ def addr(res):
     zipc = int(input("Zipcode: "))
     city = input("City: ")
 
-    query = """update Patient set H_No = %d, Street = "%s", Zipcode = %d, City = "%s"  where Patient_Id = %d""" % (hno, street, zipc, city, res["Patient_Id"])
+    query = """UPDATE Patient set H_No = %d, Street = "%s", Zipcode = %d, City = "%s"  WHERE Patient_Id = %d""" % (hno, street, zipc, city, res["Patient_Id"])
     if(qexec(query)):
         return -1
 
@@ -49,7 +49,7 @@ def contact(res):
     print("Current contact number = ", res["Contact_No"])    
     num = int(input("Enter new number: "))
 
-    query = "update Patient set Contact_No = %d where Patient_Id = %d" % (num, res["Patient_Id"])
+    query = "UPDATE Patient set Contact_No = %d WHERE Patient_Id = %d" % (num, res["Patient_Id"])
     if(qexec(query)):
         return -1
 
@@ -63,7 +63,7 @@ def modpat():
         
         pid = int(input("Enter patient id whose details are to be edited: "))
 
-        query = """select * from Patient where Patient_Id = %d""" % (pid)
+        query = """SELECT * FROM Patient WHERE Patient_Id = %d""" % (pid)
         if(qexec(query)): 
             return -1; 
         res = cur.fetchall()
@@ -75,7 +75,7 @@ def modpat():
         print("1. Contact")
         print("2. Address")
 
-        query = """select * from Insured_Patients where Patient_Id = %d""" % (pid)
+        query = """SELECT * FROM Insured_Patients WHERE Patient_Id = %d""" % (pid)
         if(qexec(query)): 
             return -1; 
         inspat = cur.fetchall()

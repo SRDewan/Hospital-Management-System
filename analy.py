@@ -55,7 +55,7 @@ def analy(optio):
 
         elif(optio == 4):
             patno = int(input("Patient_Id: "))
-            query = "SELECT sum(Amount) FROM Bill inner join Pays on Bill.Bill_No=Pays.Bill_No WHERE Patient_Id = %d " % (patno)
+            query = "SELECT sum(Amount) FROM Bill inner join Pays ON Bill.Bill_No=Pays.Bill_No WHERE Patient_Id = %d " % (patno)
             if(qexec(query)):
                 return -1
 
@@ -114,7 +114,7 @@ def analy(optio):
 
         elif(optio == 8):
             patno = int(input("Patient_Id: "))
-            query = """SELECT Bill.Bill_No, Amount FROM Bill inner join Pays on Bill.Bill_No=Pays.Bill_No WHERE Patient_Id = %d and Payment_Status = "N" """ % (patno)
+            query = """SELECT Bill.Bill_No, Amount FROM Bill inner join Pays ON Bill.Bill_No=Pays.Bill_No WHERE Patient_Id = %d and Payment_Status = "N" """ % (patno)
             if(qexec(query)):
                 return -1
 
@@ -155,7 +155,7 @@ def analy(optio):
                 for r1 in q1:
                     x.add_row([r1['Pno'], r1['Med_Name']])
 
-                q2 = "SELECT Entails.Pno, Type FROM Test_or_Surgery INNER JOIN Entails on Test_or_Surgery.Time = Entails.Time AND Test_or_Surgery.Date = Entails.Date WHERE Entails.Pno = %d " % (num)
+                q2 = "SELECT Entails.Pno, Type FROM Test_or_Surgery INNER JOIN Entails ON Test_or_Surgery.Time = Entails.Time AND Test_or_Surgery.Date = Entails.Date WHERE Entails.Pno = %d " % (num)
                 if(qexec(q2)):
                     return -1
 

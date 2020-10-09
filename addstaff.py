@@ -51,7 +51,7 @@ def adddoc(staff_id):
 
     while(row == () and dnew != "Y"):
         works["Dno"] = int(input("Department Number: "))
-        query = "select Dno from Works_In where Dno = %d" % (works["Dno"])
+        query = "SELECT Dno FROM Works_In WHERE Dno = %d" % (works["Dno"])
         if(qexec(query)):
             return -1;
         row = cur.fetchall()
@@ -123,7 +123,7 @@ def addstaff():
         staff = {}
 
         flag = 1
-        query = "select Staff_Id from Staff"
+        query = "SELECT Staff_Id FROM Staff"
         if(qexec(query)):
             return -1;
         ids = cur.fetchall()

@@ -17,7 +17,7 @@ def delshift():
         while sd not in shifts:
             sd = (input("Shift Day: "))
         
-        query = """select * from Shift where Staff_Id = %d and Shift_Start_Time = "%s" and Shift_End_Time = "%s" and Shift_Day = "%s" """ % (sid, shst, shet, sd)
+        query = """SELECT * FROM Shift WHERE Staff_Id = %d and Shift_Start_Time = "%s" and Shift_End_Time = "%s" and Shift_Day = "%s" """ % (sid, shst, shet, sd)
         if(qexec(query)): 
             return -1; 
         res = cur.fetchall()
@@ -25,16 +25,16 @@ def delshift():
             print("Invalid entry. No such shift entry.")
             return -1
 
-        query = """delete from Shift where Staff_Id = %d and Shift_Start_Time = "%s" and Shift_End_Time = "%s" and Shift_Day = "%s" """ % (sid, shst, shet, sd)
+        query = """DELETE FROM Shift WHERE Staff_Id = %d and Shift_Start_Time = "%s" and Shift_End_Time = "%s" and Shift_Day = "%s" """ % (sid, shst, shet, sd)
         if(qexec(query)): 
             return -1; 
 
-        query = """select * from Shift where Staff_Id = %d""" % (sid)
+        query = """SELECT * FROM Shift WHERE Staff_Id = %d""" % (sid)
         if(qexec(query)): 
             return -1; 
         res = cur.fetchall()
         if(res == ()):
-            print("Staff member must have atleast one shift. Please enter more shifts and then delete.")
+            print("Staff member must have atleast one shift. Please enter more shifts and then DELETE.")
             return -1
 
         print("Success!")

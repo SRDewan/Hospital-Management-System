@@ -11,7 +11,7 @@ def modtest():
         td = (input("Enter Test Date (YYYY-MM-DD): "))
         tt = (input("Enter Test Time (HH:MM:SS): "))
 
-        query = """select * from Test_or_Surgery where Date = "%s" and Time = "%s" """ % (td, tt)
+        query = """SELECT * FROM Test_or_Surgery WHERE Date = "%s" and Time = "%s" """ % (td, tt)
         if(qexec(query)): 
             return -1; 
         res = cur.fetchall()
@@ -21,7 +21,7 @@ def modtest():
 
         print("Current Test/Surgery Result = ", res[0]["Result"])
         tres = (input("Enter New Test/Surgery Result: "))
-        query = """update Test_or_Surgery set Result = "%s" where Date = "%s" and Time = "%s" """ % (tres, td, tt)
+        query = """UPDATE Test_or_Surgery set Result = "%s" WHERE Date = "%s" and Time = "%s" """ % (tres, td, tt)
         if(qexec(query)): 
             return -1; 
 
