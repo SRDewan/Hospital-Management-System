@@ -10,11 +10,12 @@ The resulting system can keep track of doctor appointments and surgeries enablin
 
 ## Steps to run the program
 
-1. Type `pip3 install prettytable`
-2. Type `mysql -h <hostname> -u <username> --port=<port number> -p < Hospital.sql`
-3. Input your MySQL password when prompted
-4. Type `python3 main.py` to start the CLI
-5. Enter your username, password, hostname and port number to use the CLI
+1. Type `pip3 install PyMySQL`
+2. Type `pip3 install prettytable`
+3. Type `mysql -h <hostname> -u <username> --port=<port number> -p < Hospital.sql`
+4. Input your MySQL password when prompted
+5. Type `python3 main.py` to start the CLI
+6. Enter your username, password, hostname and port number to use the CLI
 
 ## Some notes on using the CLI
 
